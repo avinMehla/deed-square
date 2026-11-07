@@ -1,0 +1,890 @@
+<title>DeedSquare</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap">
+<style>
+/* Layout concept: navy brand bands carry the hero and footer; the lead form is a gold double-ruled "slip" echoing the printed card; content pages are plain, document-like sections. */
+:root{
+ --bg:#F5F6FA;--surface:#FFFFFF;--surface-2:#ECEFF7;--ink:#0E1A3E;--ink-2:#46526F;--line:#D8DCE9;
+ --band:#0E1A3E;--band-2:#18275C;--on-band:#F4F1E6;--on-band-2:#B7BFDA;
+ --gold:#DDAB2F;--gold-text:#7F5C0B;--on-gold:#0E1A3E;--logo:#0E1A3E;
+ --ok:#1D7A4D;--ok-bg:#E2F2EA;--warn:#9A5B00;--warn-bg:#FBEBD0;--bad:#B3261E;--bad-bg:#F9E0DE;
+ --serif:'Noto Serif Display',Georgia,'Times New Roman',serif;--sans:'Outfit',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0A1130;--surface:#111B42;--surface-2:#16224F;--ink:#EEF1FA;--ink-2:#A8B2D2;--line:#27356A;
+ --band:#070D26;--band-2:#101B47;--gold-text:#E5B63F;--gold:#E5B63F;--logo:#E5B63F;
+ --ok:#5CD39A;--ok-bg:#12382B;--warn:#F0B35A;--warn-bg:#3A2B0E;--bad:#FF8F86;--bad-bg:#3E1A1A;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0A1130;--surface:#111B42;--surface-2:#16224F;--ink:#EEF1FA;--ink-2:#A8B2D2;--line:#27356A;
+ --band:#070D26;--band-2:#101B47;--gold-text:#E5B63F;--gold:#E5B63F;--logo:#E5B63F;
+ --ok:#5CD39A;--ok-bg:#12382B;--warn:#F0B35A;--warn-bg:#3A2B0E;--bad:#FF8F86;--bad-bg:#3E1A1A;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 var(--sans);padding-bottom:0;-webkit-text-size-adjust:100%}
+body.lock{overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--band)}
+h1,h2,h3,h4,h5{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.25rem,5.4vw,3.7rem);font-weight:700}
+h2{font-size:clamp(1.65rem,3.3vw,2.4rem)}
+h3{font-size:1.25rem}
+h4{font-size:1.15rem}
+p{margin:0}
+a{color:inherit}
+.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.2em}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sec{padding-block:clamp(2.75rem,6.5vw,5rem)}
+.sec.alt{background:var(--surface);border-block:1px solid var(--line)}
+.sec-h{display:grid;gap:.6rem;max-width:46rem;margin-bottom:2rem}
+.sec-h p{color:var(--ink-2)}
+.muted{color:var(--ink-2)}
+.small{font-size:.875rem}
+.grid{display:grid;gap:1.25rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:.75rem}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:2rem;align-items:start}
+@media(max-width:900px){.split{grid-template-columns:minmax(0,1fr)}}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.6rem 1.15rem;border-radius:5px;border:1.5px solid transparent;font:600 .95rem/1.2 var(--sans);cursor:pointer;text-decoration:none;background:none;color:inherit;text-align:center}
+.btn:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn-gold{background:var(--gold);color:var(--on-gold)}
+.btn-gold:hover{filter:brightness(1.07)}
+.btn-ink{background:var(--ink);color:var(--bg)}
+.btn-ink:hover{filter:brightness(1.15)}
+.btn-line{border-color:var(--line);color:var(--ink);background:var(--surface)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-onband{border-color:rgba(244,241,230,.4);color:var(--on-band)}
+.btn-onband:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm{min-height:36px;padding:.35rem .8rem;font-size:.85rem}
+.link{color:var(--gold-text);font-weight:600;text-decoration:none;display:inline-flex;gap:.35rem;align-items:center;background:none;border:0;padding:0;cursor:pointer;font-family:inherit;font-size:inherit}
+.link:hover{text-decoration:underline}
+/* header */
+.topbar{background:var(--band);color:var(--on-band-2);font-size:.85rem}
+.topbar .wrap{display:flex;flex-wrap:wrap;gap:.2rem 1.5rem;justify-content:space-between;padding-block:.5rem}
+.topbar a{text-decoration:none;color:var(--on-band)}
+.topbar span{display:inline-flex;gap:.4rem;align-items:center}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:1rem;min-height:68px}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand svg{width:42px;height:35px;color:var(--logo);fill:currentColor}
+.brand b{display:block;font:700 1.45rem/1 var(--sans);letter-spacing:-.035em}
+.brand small{display:block;font:500 .7rem/1.2 var(--sans);color:var(--ink-2);margin-top:.15rem}
+.menu{display:none;gap:.15rem;align-items:center}
+.menu a{padding:.5rem .65rem;text-decoration:none;font-weight:500;font-size:.95rem;border-radius:4px;color:var(--ink-2)}
+.menu a:hover,.menu a.on{color:var(--ink)}
+.menu a.on{box-shadow:inset 0 -2px 0 var(--gold)}
+.nav-cta{display:none;gap:.5rem}
+.burger{display:inline-flex;min-width:44px;min-height:44px;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;cursor:pointer}
+.menu.open{display:flex;flex-direction:column;align-items:stretch;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);padding:.5rem max(16px,env(safe-area-inset-left,0px)) 1rem;box-shadow:0 18px 30px -20px rgba(0,0,0,.35)}
+.menu.open a{padding:.8rem .5rem;border-bottom:1px solid var(--line)}
+@media(min-width:1100px){.menu{display:flex}.burger{display:none}.nav-cta{display:flex}}
+/* bands */
+.band{background:var(--band);color:var(--on-band);position:relative;overflow:hidden}
+.band p{color:var(--on-band-2)}
+.wm{position:absolute;right:-6%;top:-8%;width:min(60vw,620px);height:auto;color:var(--gold);opacity:.07;fill:currentColor;pointer-events:none}
+.hero{padding-block:clamp(2.5rem,6vw,4.5rem) 0}
+.hero .wrap{position:relative}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+@media(max-width:940px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
+.hero h1{color:var(--on-band)}
+.hero .sub{font-size:1.1rem;max-width:34rem;margin-top:1.1rem}
+.ticks{list-style:none;padding:0;margin:1.4rem 0;display:grid;gap:.55rem}
+.ticks li{display:flex;gap:.6rem;align-items:flex-start;color:var(--on-band)}
+.ticks .i{color:var(--gold);margin-top:.2rem}
+.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:0;margin-top:clamp(2rem,5vw,3.5rem);border-top:1px solid rgba(244,241,230,.18)}
+.facts div{padding:1.1rem 1rem 1.3rem 0}
+.facts b{display:block;font:600 1.5rem/1.2 var(--serif);color:var(--gold)}
+.facts span{font-size:.9rem;color:var(--on-band-2)}
+/* slip form */
+.slip{background:var(--surface);color:var(--ink);padding:1.6rem;border-radius:3px;position:relative;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.slip::after{content:"";position:absolute;inset:7px;border:1px solid var(--gold);pointer-events:none;border-radius:1px}
+.slip h2{font-size:1.5rem}
+.slip form{display:grid;gap:.75rem;margin-top:1rem}
+.slip .fine{font-size:.8rem;color:var(--ink-2)}
+.field{display:grid;gap:.25rem;min-width:0}
+.field label{font-size:.82rem;font-weight:500;color:var(--ink-2)}
+input,select,textarea{width:100%;min-width:0;font:inherit;font-size:.95rem;padding:.62rem .7rem;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink)}
+input[aria-invalid="true"],select[aria-invalid="true"]{border-color:var(--bad)}
+.msg{color:var(--bad);font-size:.78rem;min-height:0}
+.chk-line{display:flex;gap:.5rem;align-items:center;font-size:.88rem}
+.chk-line input{width:auto}
+/* cards & lists */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.4rem;display:grid;gap:.6rem;align-content:start}
+.card p{color:var(--ink-2);font-size:.95rem}
+.card.flat{background:transparent}
+.pill{display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:99px;font-size:.78rem;font-weight:600;background:var(--surface-2);color:var(--ink)}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.gold{background:var(--gold);color:var(--on-gold)}
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.pillars>div{padding:1.5rem;display:grid;gap:.5rem;align-content:start;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0}
+.pillars .i{width:1.6rem;height:1.6rem;color:var(--gold-text)}
+.pillars p{color:var(--ink-2);font-size:.93rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{padding:.4rem .85rem;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:.9rem;cursor:pointer;color:var(--ink);font-family:inherit}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.docs .chip{cursor:default;font-weight:500}
+.tick-list{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.tick-list li{display:flex;gap:.55rem;align-items:flex-start}
+.tick-list .i{color:var(--ok);margin-top:.22rem}
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:1.25rem;counter-reset:s}
+.stage{border-top:3px solid var(--gold);padding-top:1rem;display:grid;gap:.6rem;align-content:start}
+.stage .n{font:600 .85rem var(--sans);color:var(--gold-text)}
+.stage p{color:var(--ink-2);font-size:.95rem}
+.deliv{font-size:.85rem;font-weight:600}
+/* service rows */
+.rows>article{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem 3rem;padding-block:2rem;border-top:1px solid var(--line)}
+.rows>article:last-child{border-bottom:1px solid var(--line)}
+@media(max-width:760px){.rows>article{grid-template-columns:minmax(0,1fr)}}
+.rows h3{margin-bottom:.5rem}
+.rows .btn{margin-top:1rem}
+/* scanner */
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.scan{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:2rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:clamp(1.25rem,3vw,2.25rem)}
+@media(max-width:820px){.scan{grid-template-columns:minmax(0,1fr)}}
+.scan h3{margin:.6rem 0}
+.scan .how{background:var(--surface-2);border-radius:6px;padding:1.2rem;display:grid;gap:.75rem;align-content:start}
+/* faq */
+details.q{border-bottom:1px solid var(--line);padding:1rem 0}
+details.q summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:1rem;align-items:center}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .i{transition:transform .2s}
+details.q[open] summary .i{transform:rotate(180deg)}
+details.q p{margin-top:.6rem;color:var(--ink-2);max-width:48rem}
+/* coverage */
+.cov{display:grid;gap:.5rem;align-content:start}
+.cov h3{display:flex;justify-content:space-between;gap:.5rem;align-items:center}
+/* footer */
+.foot{background:var(--band);color:var(--on-band-2);padding-block:3rem 5.5rem;font-size:.92rem}
+.foot .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:2rem}
+.foot h4{color:var(--on-band);font:600 1rem var(--sans);margin-bottom:.7rem}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}
+.foot a{text-decoration:none;color:var(--on-band-2)}
+.foot a:hover{color:var(--gold)}
+.foot .brand{color:var(--on-band)}.foot .brand svg{color:var(--gold)}.foot .brand small{color:var(--on-band-2)}
+.disc{grid-column:1/-1;border-top:1px solid rgba(244,241,230,.16);padding-top:1.25rem;font-size:.82rem}
+/* floating */
+.fab{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:.6rem;z-index:40}
+.fab a{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;text-decoration:none;box-shadow:0 8px 20px -6px rgba(0,0,0,.5)}
+.fab .wa{background:#1FA855;color:#fff}.fab .ph{background:var(--gold);color:var(--on-gold)}
+.fab .i{width:1.5rem;height:1.5rem}
+@media(max-width:700px){.fab{display:none}}
+.dock{display:none}
+@media(max-width:700px){.dock{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--band);padding:.4rem max(8px,env(safe-area-inset-right,0px)) calc(.4rem + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));gap:.4rem}
+ .dock a,.dock button{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-height:48px;justify-content:center;color:var(--on-band);font:500 .75rem var(--sans);text-decoration:none;background:none;border:0;cursor:pointer}
+ .dock .i{width:1.3rem;height:1.3rem;color:var(--gold)}}
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(4,9,28,.66);padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet{position:relative;background:var(--surface);color:var(--ink);width:100%;max-width:560px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:8px;padding:1.5rem;display:grid;gap:.9rem;align-content:start}
+.sheet.wide{max-width:1040px}
+.sheet .x{position:absolute;top:.6rem;right:.6rem;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.sheet h3{padding-right:2.5rem}
+.sheet form{display:grid;gap:.75rem}
+.dl{display:grid;gap:.4rem;margin:0}
+.dl div{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:.75rem;padding:.4rem 0;border-bottom:1px solid var(--line)}
+.dl dt{color:var(--ink-2);font-size:.88rem}.dl dd{margin:0;overflow-wrap:anywhere}
+.seg{display:flex;gap:.5rem;flex-wrap:wrap}
+.seg button{flex:1;min-width:90px;padding:.65rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;font:500 .95rem var(--sans);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:.65rem 1.1rem;border-radius:6px;z-index:120;font-size:.92rem;max-width:90vw}
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:.92rem}
+th,td{text-align:left;padding:.75rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--ink-2);font-size:.82rem;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+tr.sel td{background:var(--surface-2)}
+/* page heads */
+.phead{padding-block:clamp(2.5rem,6vw,4rem) clamp(2rem,4vw,3rem)}
+.phead h1{font-size:clamp(2rem,4.6vw,3.2rem);color:var(--on-band)}
+.phead p{margin-top:.9rem;max-width:40rem;font-size:1.08rem}
+/* law */
+.law{display:grid;gap:2.2rem}
+.law article{display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr);gap:1.5rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+@media(max-width:700px){.law article{grid-template-columns:minmax(0,1fr)}}
+.law .tag{font-weight:600;color:var(--gold-text);font-size:.9rem}
+.law p{max-width:42rem;color:var(--ink-2)}
+.law h3{margin-bottom:.6rem}
+.flags{display:grid;gap:.6rem;list-style:none;padding:0;margin:0}
+.flags label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer}
+.flags input{width:auto;margin-top:.35rem}
+/* blog */
+.mast{text-align:center;padding-block:2.5rem 2rem;border-bottom:3px double var(--line);margin-bottom:1.5rem}
+.mast h2{font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:.02em}
+.mast p{color:var(--ink-2);max-width:40rem;margin:.6rem auto 0}
+.art{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:clamp(1.1rem,3vw,2rem);margin-bottom:1.5rem;display:grid;gap:1rem}
+.art .meta{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;font-size:.85rem;color:var(--ink-2)}
+.art .lead{font-size:1.08rem;color:var(--ink-2);max-width:42rem}
+.tools{display:flex;flex-wrap:wrap;gap:.4rem}
+.btn-t{display:inline-flex;gap:.35rem;align-items:center;min-height:36px;padding:.25rem .7rem;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--ink);font:500 .85rem var(--sans);cursor:pointer}
+.btn-t.on{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
+.prose{max-width:42rem;display:grid;gap:.8rem}
+.prose h4{margin-top:.8rem}
+.prose h5{font-size:1rem;margin-top:.4rem}
+.prose ul,.prose ol{margin:0;padding-left:1.3rem;display:grid;gap:.35rem}
+.prose .warn{background:var(--warn-bg);color:var(--warn);padding:.8rem 1rem;border-radius:5px;font-weight:500}
+.prose blockquote{margin:0;padding:.2rem 0 .2rem 1rem;border-left:3px solid var(--gold);font-family:var(--serif);font-size:1.08rem}
+.prose ul.chk{list-style:none;padding:0}
+.prose ul.chk li::before{content:"";display:inline-block;width:.85rem;height:.85rem;border:1.5px solid var(--gold-text);border-radius:2px;margin-right:.6rem;vertical-align:-.1rem}
+.byline{display:flex;gap:.9rem;align-items:center;padding:1rem;background:var(--surface-2);border-radius:6px;flex-wrap:wrap}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--band);color:var(--gold);display:grid;place-items:center;font:600 1rem var(--serif);flex:none}
+.byline div{min-width:0;flex:1}
+.qa{display:grid;gap:.9rem}
+.qa>div{border-left:3px solid var(--line);padding-left:1rem;display:grid;gap:.35rem}
+.qa b{font-weight:600}
+.qa .a{color:var(--ink-2);font-size:.95rem}
+.side{display:grid;gap:1.25rem;position:sticky;top:calc(84px + env(safe-area-inset-top,0px))}
+@media(max-width:900px){.side{position:static}}
+.side ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+/* states */
+.dir{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1rem}
+.dir .card h3{font-size:1.1rem}
+.srch{max-width:360px}
+/* timeline */
+.tl{list-style:none;margin:0;padding:0 0 0 1.2rem;border-left:2px solid var(--line);display:grid;gap:1.1rem}
+.tl li{position:relative}
+.tl li::before{content:"";position:absolute;left:calc(-1.2rem - 7px);top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--surface)}
+.tl b{display:block}
+.tl span{color:var(--ink-2);font-size:.92rem}
+.stat{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:1.1rem 1.2rem}
+.stat b{display:block;font:600 2rem/1.1 var(--serif)}
+.stat span{font-size:.85rem;color:var(--ink-2)}
+.opt{display:grid;gap:.2rem;text-align:left;padding:.8rem 1rem;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;font:inherit}
+.opt.on{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.opt small{color:var(--ink-2)}
+.est{background:var(--surface-2);border-radius:8px;padding:1.3rem;display:grid;gap:.7rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:1.25rem}
+.steps>div{display:grid;gap:.4rem;align-content:start}
+.steps .n{width:34px;height:34px;border-radius:50%;background:var(--band);color:var(--gold);display:grid;place-items:center;font:600 .95rem var(--serif)}
+.pv{border:1px dashed var(--line);border-radius:6px;padding:1rem;margin-inline:auto}
+.pv.mob{max-width:380px}
+.studio-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.25rem}
+@media(max-width:860px){.studio-g{grid-template-columns:minmax(0,1fr)}}
+.bar{display:flex;flex-wrap:wrap;gap:.35rem}
+pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);padding:.8rem;border-radius:5px;font-size:.78rem;max-height:240px;overflow:auto;margin:0}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+<style>.seg button:disabled{opacity:.45;cursor:not-allowed}.seg button small{font-weight:400;opacity:.8}</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="logo" viewBox="0 0 100 84"><path d="M10.5 0H72L91 19.5V70H84V22.4L69.1 7H17.5V69H10.5Z"/><rect x="25" y="16" width="34" height="4.6"/><rect x="25" y="26" width="52" height="4.6"/><rect x="25" y="36" width="52" height="4.6"/><path d="M0 83 51 36 100 83H87.5L51 49.5 12.5 83Z"/><rect x="68" y="43" width="8.5" height="14"/><rect x="45" y="64" width="5" height="5"/><rect x="52" y="64" width="5" height="5"/><rect x="45" y="71" width="5" height="5"/><rect x="52" y="71" width="5" height="5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+<symbol id="i-wa" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.2A8.5 8.5 0 1 1 21 11.5z"/><path d="M9 8.5c0 3 3 6 6 6l1.2-1.4-2-1-1 .6a4 4 0 0 1-1.8-1.8l.6-1-1-2z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+<symbol id="i-mark" viewBox="0 0 24 24"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+<symbol id="i-stamp" viewBox="0 0 24 24"><path d="M5 22h14M7 18h10v-3a3 3 0 0 0-3-3h0a3 3 0 0 1-1-5.8V6a1 1 0 0 0-2 0v.2A3 3 0 0 1 10 12a3 3 0 0 0-3 3z"/></symbol>
+<symbol id="i-gavel" viewBox="0 0 24 24"><path d="m14 13-8.4 8.4a2.1 2.1 0 0 1-3-3L11 10M16 16l6-6M8 8l6-6M9 7l8 8M21 11l-8-8"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+</defs></svg>
+
+<header>
+<div class="topbar"><div class="wrap">
+ <span class="ph-line"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg> <a href="tel:+919211111401">92111 11401</a> &nbsp;<a href="tel:+918390000066">83900 00066</a></span>
+ <span><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg> Mon to Sat, 10:00 AM to 7:00 PM</span>
+ <span><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg> Main Jattal Road, Panipat</span>
+</div></div>
+<div class="nav"><div class="wrap">
+ <a class="brand" href="#home" aria-label="DeedSquare home"><svg viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><span><b>DeedSquare</b><small>Sahil Khenchi, Advocate</small></span></a>
+ <nav class="menu" id="menu" aria-label="Main">
+  <a href="#home">Home</a><a href="#services">Services</a><a href="#know-the-law">Know the Law</a><a href="#blog">Gazette</a><a href="#states">States</a><a href="#about">About</a><a href="#contact">Contact</a>
+ </nav>
+ <div class="nav-cta"><button class="btn btn-line btn-sm" data-open="m-jam">Get Jamabandi</button><a class="btn btn-gold btn-sm" href="#portal"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg> Client portal</a></div>
+ <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
+</div></div>
+</header>
+
+<main>
+<!-- HOME -->
+<section data-page="home">
+ <div class="band hero">
+  <svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg>
+  <div class="wrap">
+   <div class="hero-grid">
+    <div>
+     <h1>Check the title before you sign the deed.</h1>
+     <p class="sub">DeedSquare is the property practice of Advocate Sahil Khenchi in Panipat. We trace 30 years of ownership, check the revenue record and the courts, then draft and register the deed once the title is clear.</p>
+     <ul class="ticks">
+      <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg> 30-year chain of title and encumbrance check</li>
+      <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg> Jamabandi and mutation (intkal) verification</li>
+      <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg> Express report in 24 to 48 hours</li>
+     </ul>
+     <div class="cta-row"><button class="btn btn-gold" data-scroll="hero-form-box">Check my property</button><a class="btn btn-onband" href="#services">View all services</a></div>
+    </div>
+    <div class="slip" id="hero-form-box">
+     <h2>Free property check</h2>
+     <p class="fine">Reply comes on WhatsApp. Your details stay confidential.</p>
+     <form id="f-hero" data-kind="lead" novalidate></form>
+    </div>
+   </div>
+   <div class="facts">
+    <div><b>30 years</b><span>of registered deeds traced</span></div>
+    <div><b>4 stages</b><span>from register to signed opinion</span></div>
+    <div><b>24 to 48 hr</b><span>express report for most files</span></div>
+    <div><b>Panipat</b><span>Main Jattal Road office</span></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="sec"><div class="wrap">
+  <div class="pillars" id="pillars"></div>
+  <div class="chips docs" style="margin-top:1.5rem" id="doc-chips"></div>
+ </div></div>
+
+ <div class="sec alt"><div class="wrap">
+  <div class="sec-h"><h2>Our four-stage title audit</h2><p>How a file moves from the registers to a signed opinion, so hidden mortgages, doubtful powers of attorney and revenue disputes surface before you pay.</p></div>
+  <div class="stages" id="stages"></div>
+ </div></div>
+
+ <div class="sec"><div class="wrap">
+  <div class="sec-h"><h2>Legal verification services</h2></div>
+  <div class="grid g3" id="svc-home"></div>
+  <p style="margin-top:1.5rem"><a class="link" href="#services">View all services <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+ </div></div>
+
+ <div class="sec alt"><div class="wrap">
+  <div class="sec-h"><h2>Find the legal risk in your deal</h2><p>Pick the situation that matches your property to see what can go wrong and what we check.</p></div>
+  <div class="tabs" id="scan-tabs" role="tablist"></div>
+  <div class="scan" id="scan"></div>
+ </div></div>
+
+ <div class="sec"><div class="wrap">
+  <div class="sec-h"><h2>Bank loan papers and deed registration</h2><p>Title search reports, non-encumbrance certificates and loan dockets prepared to the format lenders ask for, plus drafting and registration support.</p></div>
+  <div class="grid g4" id="bank-grid"></div>
+ </div></div>
+
+ <div class="sec alt"><div class="wrap">
+  <div class="sec-h"><h2>Where we work</h2><p>The Panipat desk is open now. Other regions are being added.</p></div>
+  <div class="grid g4" id="cov-home"></div>
+  <p style="margin-top:1.5rem"><a class="link" href="#states">All states and union territories <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+ </div></div>
+
+ <div class="sec"><div class="wrap" style="max-width:860px">
+  <div class="sec-h"><h2>Frequently asked questions</h2></div>
+  <div id="faq"></div>
+ </div></div>
+
+ <div class="band sec"><div class="wrap" style="display:grid;gap:1rem;justify-items:start">
+  <h2 style="color:var(--on-band)">Not sure where your papers stand?</h2>
+  <p>Send the deed details and we will tell you what needs checking.</p>
+  <div class="cta-row"><button class="btn btn-gold" data-open="m-quick">Take the 1-minute quick check</button><a class="btn btn-onband" href="#contact">Book a consultation</a></div>
+ </div></div>
+</section>
+
+<!-- SERVICES -->
+<section data-page="services" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>Property verification and documentation</h1><p>Title searches, litigation checks, mutation, deed drafting, registration and bank documentation under one roof.</p></div></div>
+ <div class="sec"><div class="wrap"><div class="rows" id="svc-rows"></div></div></div>
+ <div class="sec alt"><div class="wrap">
+  <div class="sec-h"><h2>Deeds and documents we draft</h2><p>Each document is drafted for the party who instructs us and checked against the title papers before it goes for registration.</p></div>
+  <div class="grid g3" id="docs-grid"></div>
+ </div></div>
+ <div class="sec"><div class="wrap"><div class="sec-h"><h2>What it takes to get a report</h2></div><div class="steps" id="svc-steps"></div></div></div>
+</section>
+
+<!-- KNOW THE LAW -->
+<section data-page="know-the-law" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>Know the law before buying property</h1><p>Core property rules, Supreme Court rulings and Haryana land record terms in plain language.</p></div></div>
+ <div class="sec"><div class="wrap"><div class="law" id="law"></div></div></div>
+</section>
+
+<!-- BLOG -->
+<section data-page="blog" hidden>
+ <div class="wrap">
+  <div class="mast"><span class="pill gold">Vol. 1, November 2026</span><h2 style="margin-top:.8rem">The DeedSquare Gazette</h2><p>Land records, title due diligence, registration and property law, written for buyers, sellers and families.</p>
+   <div class="cta-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-line btn-sm" id="open-studio"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg> Author studio</button></div></div>
+  <div class="split" style="padding-bottom:3rem">
+   <div><div class="tabs" id="blog-tabs"></div><div id="blog-list"></div></div>
+   <aside class="side">
+    <div class="card"><h3>Get your property verified before signing</h3><p>An advocate checks the registers, the revenue record and the courts.</p><button class="btn btn-gold" data-open="m-jam">Get Jamabandi copy</button></div>
+    <div class="card"><h3>Essential reading</h3><ul id="essential"></ul></div>
+    <div class="card"><h3>Quick navigation</h3><ul><li><a class="link" href="#services">All services</a></li><li><a class="link" href="#states">States coverage</a></li><li><a class="link" href="#know-the-law">Know the law</a></li><li><a class="link" href="#portal">Demo audit portal</a></li><li><a class="link" href="#contact">Book a consultation</a></li></ul></div>
+    <div class="card"><h3>Advocate helpdesk</h3><p>Have a deed or mutation notice to review?</p><p><a class="link" href="tel:+919211111401">92111 11401</a> &nbsp; <a class="link" href="tel:+918390000066">83900 00066</a></p></div>
+   </aside>
+  </div>
+ </div>
+</section>
+
+<!-- STATES -->
+<section data-page="states" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>All 28 states and 8 union territories</h1><p>The Panipat desk is live for Haryana. Every other jurisdiction is listed with the records we will check, and you can ask to be told when it opens.</p></div></div>
+ <div class="sec"><div class="wrap"><div class="sec-h"><h2>Key corridors</h2></div><div class="grid g3" id="hubs"></div></div></div>
+ <div class="sec alt"><div class="wrap">
+  <div class="sec-h"><h2>Full directory</h2></div>
+  <div class="tabs" id="dir-tabs"></div>
+  <div class="field srch" style="margin-bottom:1.25rem"><label for="dir-q">Search a state, capital or record system</label><input id="dir-q" type="search" placeholder="For example, Bhulekh"></div>
+  <div class="dir" id="dir"></div>
+ </div></div>
+</section>
+
+<!-- ABOUT -->
+<section data-page="about" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>About DeedSquare</h1><p>A property documentation and verification practice run by Advocate Sahil Khenchi in Panipat.</p></div></div>
+ <div class="sec"><div class="wrap" style="max-width:820px;display:grid;gap:1rem">
+  <p>Property is usually the largest purchase a family makes, and most disputes start with a paper nobody checked. DeedSquare was set up to deal with that early: verify the title, draft the deed properly, and see it through registration and mutation.</p>
+  <p>We work on sale deeds, agreements to sell, gift deeds, wills, powers of attorney and affidavits, and on the legal verification that sits behind them. The advice is plain and specific, so you can decide with the facts in front of you.</p>
+ </div></div>
+ <div class="sec alt"><div class="wrap"><div class="sec-h"><h2>Practice areas</h2></div><div class="grid g3" id="practice"></div></div></div>
+ <div class="sec"><div class="wrap"><div class="sec-h"><h2>Why clients choose us</h2></div><div class="grid g4" id="why"></div></div></div>
+ <div class="band sec"><div class="wrap" style="max-width:820px"><h2 style="color:var(--on-band)">Our mission</h2><p style="font-family:var(--serif);font-size:1.35rem;line-height:1.45;margin-top:1rem;color:var(--on-band)">To make every property transaction in our region safe, documented and understood by the people signing it.</p></div></div>
+ <div class="sec"><div class="wrap">
+  <div class="sec-h"><h2>The advocate</h2></div>
+  <div class="slip" style="max-width:720px;display:grid;gap:.8rem">
+   <div style="display:flex;gap:1rem;align-items:center"><div class="avatar" style="width:64px;height:64px;font-size:1.3rem">SK</div><div><h3>Sahil Khenchi</h3><p class="muted">Advocate, Panipat</p></div></div>
+   <p>Focus: deed drafting, property documentation, registration assistance and legal verification.</p>
+   <div class="chips docs" id="adv-chips"></div>
+   <p class="small muted">Office: Main Jattal Road, Panipat, near Pipal Wali Gali.</p>
+   <div class="cta-row"><button class="btn btn-gold" data-open="m-lead" data-note="I would like to consult Advocate Sahil Khenchi." data-title="Consult Advocate Sahil Khenchi">Consult the advocate</button></div>
+  </div>
+ </div></div>
+</section>
+
+<!-- CONTACT -->
+<section data-page="contact" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>Get in touch with DeedSquare</h1><p>Speak to the advocate about a title search, mutation, deed registration or a bank loan file.</p></div></div>
+ <div class="sec"><div class="wrap"><div class="grid g2">
+  <div class="card" style="gap:.9rem"><h2 style="font-size:1.6rem">DeedSquare, Panipat</h2>
+   <p style="color:var(--ink)">Main Jattal Road, Panipat<br>Near Pipal Wali Gali, Panipat</p>
+   <dl class="dl"><div><dt>Open</dt><dd>Mon to Sat, 10:00 AM to 7:00 PM</dd></div><div><dt>Phone</dt><dd>92111 11401, 83900 00066</dd></div><div><dt>Services</dt><dd>Deed drafting, property documentation, registration assistance, legal verification</dd></div></dl>
+   <p class="small muted">Please message or call before visiting so the advocate is at the desk for your file.</p>
+   <div class="cta-row"><a class="btn btn-gold btn-sm" id="c-wa" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg> WhatsApp desk</a><a class="btn btn-line btn-sm" href="tel:+919211111401"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg> Call</a><button class="btn btn-line btn-sm" id="c-copy"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> Copy address</button></div>
+  </div>
+  <div class="card" style="gap:.9rem"><h3>Find the office</h3>
+   <p>Maps cannot be embedded on this page, so use the links below to open directions.</p>
+   <div class="cta-row"><a class="btn btn-ink btn-sm" id="c-dir" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg> Get directions</a><button class="btn btn-line btn-sm" id="c-share"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg> Copy map link</button></div>
+   <p class="small muted">Landmark: Pipal Wali Gali, Main Jattal Road.</p>
+  </div>
+ </div></div></div>
+
+ <div class="sec alt"><div class="wrap"><div class="grid g2" style="align-items:start">
+  <div><div class="sec-h" style="margin-bottom:1rem"><h2>Turnaround and document estimator</h2><p>Choose the property and the service to see the usual timeline and the papers to bring.</p></div>
+   <div class="field"><label>1. Property type</label><div class="seg" id="est-t"></div></div>
+   <div class="field" style="margin-top:1rem"><label>2. Legal scope</label><div class="seg" id="est-s"></div></div>
+   <div class="est" style="margin-top:1.25rem" id="est-out" aria-live="polite"></div>
+  </div>
+  <div><div class="sec-h" style="margin-bottom:1rem"><h2>Schedule a consultation</h2><p>Choose how and when to meet the advocate. The first 15-minute intake is free.</p></div>
+   <form id="f-sched" data-kind="sched" novalidate class="card" style="gap:1rem">
+    <div class="field"><label>1. Mode</label><div class="seg" id="sc-mode"></div></div>
+    <div class="field"><label>2. Day</label><div class="seg" id="sc-day"></div></div>
+    <div class="field"><label>3. Time slot</label><div class="seg" id="sc-slot"></div></div>
+    <div id="sc-fields"></div>
+    <button class="btn btn-gold" type="submit">Confirm appointment request</button>
+   </form>
+  </div>
+ </div></div></div>
+
+ <div class="sec"><div class="wrap"><div class="sec-h"><h2>What happens when you contact us</h2><p>Your property goes through a defined review as soon as you reach out.</p></div><div class="steps" id="contact-steps"></div></div></div>
+</section>
+
+<!-- PORTAL -->
+<section data-page="portal" hidden>
+ <div class="band phead"><svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><div class="wrap"><h1>Client audit portal</h1><p>Track title searches, mutation checks and bank dockets in one place. This page is a working demo with sample cases.</p></div></div>
+ <div class="sec"><div class="wrap" id="portal-body"></div></div>
+</section>
+</main>
+
+<footer class="foot"><div class="wrap">
+ <div><a class="brand" href="#home"><svg viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><span><b>DeedSquare</b><small>Sahil Khenchi, Advocate</small></span></a>
+  <p style="margin-top:1rem">Property title search, deed drafting, registration assistance and legal verification in Panipat.</p></div>
+ <div><h4>Legal services</h4><ul><li><a href="#services">30-year title search report</a></li><li><a href="#services">Deed drafting and registration</a></li><li><a href="#services">Revenue mutation (Jamabandi)</a></li><li><a href="#services">Bank loan documentation</a></li><li><a href="#services">Court and litigation check</a></li></ul></div>
+ <div><h4>Client account</h4><ul><li><button class="link" style="color:var(--on-band-2)" data-open="m-acct">Client portal login</button></li><li><a href="#portal">Audit dashboard (demo)</a></li><li><a href="#know-the-law">Know the law</a></li><li><a href="#blog">Gazette and articles</a></li><li><a href="#states">States hub</a></li></ul></div>
+ <div><h4>Office</h4><ul><li>Main Jattal Road, Panipat</li><li>Near Pipal Wali Gali, Panipat</li><li>92111 11401</li><li>83900 00066</li><li>Mon to Sat, 10:00 AM to 7:00 PM</li></ul></div>
+ <p class="disc">This website gives general information about property law and our services. It is not an advertisement or solicitation, and reading it does not create an advocate and client relationship. Sample records, demo portal cases and reports shown here are illustrations and do not describe real clients or properties. &copy; 2026 DeedSquare, Sahil Khenchi, Advocate.</p>
+</div></footer>
+
+<div class="fab"><a class="wa" id="fab-wa" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg></a><a class="ph" href="tel:+919211111401" aria-label="Call"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg></a></div>
+<nav class="dock" aria-label="Quick actions"><a href="tel:+919211111401"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg> Call</a><a id="dock-wa" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg> WhatsApp</a><button data-open="m-quick"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg> Quick check</button></nav>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<!-- MODALS -->
+<div class="modal" id="m-jam" hidden><div class="sheet" role="dialog" aria-label="Get Jamabandi copy"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3>Get a Jamabandi copy</h3><p class="muted small">Prepared and checked by the advocate, delivered on WhatsApp.</p>
+ <form id="f-jam" data-kind="jam" novalidate></form></div></div>
+
+<div class="modal" id="m-lead" hidden><div class="sheet" role="dialog" aria-label="Request"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3 id="lead-title">Tell us about your property</h3>
+ <form id="f-lead" data-kind="enq" novalidate></form></div></div>
+
+<div class="modal" id="m-quick" hidden><div class="sheet" role="dialog" aria-label="Quick check"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3>Are your property papers safe?</h3><div id="quick-body" style="display:grid;gap:1rem"></div></div></div>
+
+<div class="modal" id="m-acct" hidden><div class="sheet" role="dialog" aria-label="Account"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3 id="acct-title">Sign in to your account</h3>
+ <div class="seg"><button class="on" data-acct="in">Sign in</button><button data-acct="up">Create account</button></div>
+ <p class="small muted">Demo mode: sign-in runs in this browser only. Nothing is stored on a server and no password is kept.</p>
+ <form id="f-in" data-kind="signin" novalidate>
+  <div class="field"><label for="in-id">Mobile number, email or username</label><input id="in-id" name="id" data-req="1" autocomplete="username"><small class="msg"></small></div>
+  <div class="field"><label for="in-pw">Password</label><input id="in-pw" name="pw" type="password" data-req="1" autocomplete="current-password"><small class="msg"></small></div>
+  <div class="small" style="background:var(--surface-2);padding:.7rem;border-radius:5px">Demo login: <b>demo@deedsquare.in</b> and password <b>123</b> <button type="button" class="link" id="autofill">Auto fill</button></div>
+  <button class="btn btn-gold" type="submit">Sign in to dashboard</button></form>
+ <form id="f-up" data-kind="signup" hidden novalidate>
+  <div class="field"><label for="up-name">Full name</label><input id="up-name" name="name" data-req="1"><small class="msg"></small></div>
+  <div class="field"><label for="up-phone">Mobile number</label><input id="up-phone" name="phone" data-req="1" data-type="phone" inputmode="tel"><small class="msg"></small></div>
+  <div class="field"><label for="up-mail">Email</label><input id="up-mail" name="mail" type="email"></div>
+  <label class="chk-line"><input type="checkbox" id="up-terms"> I agree to the terms and privacy policy</label><small class="msg" id="up-terr"></small>
+  <button class="btn btn-gold" type="submit">Create account</button></form>
+</div></div>
+
+<div class="modal" id="m-hand" hidden><div class="sheet" role="dialog" aria-label="Send details"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3 id="h-title">Send your details</h3>
+ <dl class="dl" id="h-rows"></dl>
+ <p class="small muted">Nothing is sent until you press send inside WhatsApp. You can edit the message first.</p>
+ <div class="cta-row"><a class="btn btn-gold" id="h-wa" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg> Open WhatsApp</a><button class="btn btn-line" id="h-copy"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> Copy details</button></div></div></div>
+
+<div class="modal" id="m-sample" hidden><div class="sheet" role="dialog" aria-label="Sample record"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button><div id="sample-body" style="display:grid;gap:.9rem"></div></div></div>
+
+<div class="modal" id="m-notify" hidden><div class="sheet" role="dialog" aria-label="Notify me"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3 id="nf-title">Tell me when this opens</h3>
+ <form id="f-nf" data-kind="notify" novalidate><input type="hidden" name="region" id="nf-region">
+  <div class="field"><label for="nf-name">Your name</label><input id="nf-name" name="name" data-req="1"><small class="msg"></small></div>
+  <div class="field"><label for="nf-phone">WhatsApp number</label><input id="nf-phone" name="phone" data-req="1" data-type="phone" inputmode="tel"><small class="msg"></small></div>
+  <button class="btn btn-gold" type="submit">Continue</button></form></div></div>
+
+<div class="modal" id="m-audit" hidden><div class="sheet" role="dialog" aria-label="New audit"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3>Submit a property for audit</h3>
+ <form id="f-audit" data-kind="audit" novalidate>
+  <div class="field"><label for="au-name">Property name or identifier</label><input id="au-name" name="name" data-req="1"><small class="msg"></small></div>
+  <div class="field"><label for="au-place">Locality or revenue circle</label><select id="au-place" name="place"><option>Panipat (Tehsil)</option><option>Samalkha</option><option>Israna</option><option>Madlauda</option><option>Other Haryana location</option><option>Outside Haryana (bank loan report)</option></select></div>
+  <div class="field"><label for="au-svc">Service required</label><select id="au-svc" name="svc"><option>30-year archival title search and NEC</option><option>Revenue mutation and Jamabandi verification</option><option>Bank loan documentation</option><option>Sale deed drafting and registration</option></select></div>
+  <button class="btn btn-gold" type="submit">Submit for audit</button></form></div></div>
+
+<div class="modal" id="m-studio" hidden><div class="sheet wide" role="dialog" aria-label="Author studio"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button><div id="studio-body" style="display:grid;gap:1rem"></div></div></div>
+
+<script>
+(()=>{
+'use strict';
+/* ---- Edit these to change contact details used across the site ---- */
+const CFG={wa:'919211111401',addr:'Main Jattal Road, Panipat, near Pipal Wali Gali, Panipat',hours:'Mon to Sat',slots:['10:30 AM to 11:30 AM','12:30 PM to 1:30 PM','3:00 PM to 4:00 PM','4:30 PM to 5:30 PM','6:00 PM to 7:00 PM'],slotStart:[10.5,12.5,15,16.5,18]};
+CFG.map='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(CFG.addr);
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ic=n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const wa=t=>`https://wa.me/${CFG.wa}?text=${encodeURIComponent(t||'Hello DeedSquare, I need help with a property matter.')}`;
+
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt);toast('Copied')}catch(e){const a=document.createElement('textarea');a.value=txt;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();toast(ok?'Copied':'Select the text and copy it manually')}}
+function openM(id){const m=$('#'+id);m.hidden=false;document.body.classList.add('lock');const f=$('input:not([type=hidden]),select,textarea',m);setTimeout(()=>f&&f.focus(),40)}
+function closeM(m){m.hidden=true;if(!$$('.modal:not([hidden])').length)document.body.classList.remove('lock')}
+
+/* ---- data ---- */
+const S=(n,c,z,u,r,k)=>({n,c,zone:z,ut:!!u,r,k});
+const STATES=[
+S('Haryana','Chandigarh','North',0,'Jamabandi Haryana, Tehsil and Sub-Registrar','Khewat, khatoni and fard checks, intkal status, HSVP and DTCP approvals, HRERA'),
+S('Punjab','Chandigarh','North',0,'PLRS Jamabandi and registration','Fard and jamabandi, intkal, PUDA and GMADA approvals, RERA Punjab'),
+S('Rajasthan','Jaipur','North',0,'Apna Khata and Sub-Registrar','Jamabandi, JDA patta, land conversion order, registry index search'),
+S('Uttar Pradesh','Lucknow','North',0,'UP Bhulekh and IGRSUP','Khasra and khatauni, registry cross-check, authority allotment, non-agricultural use'),
+S('Uttarakhand','Dehradun','North',0,'Bhulekh Uttarakhand and Sub-Registrar','Khatauni, land ceiling and use rules, development authority approvals'),
+S('Himachal Pradesh','Shimla','North',0,'Himbhoomi and Revenue Department','Section 118 permission for non-agriculturists, mutation, municipal records'),
+S('West Bengal','Kolkata','East',0,'Banglarbhumi','Khatian and plot porcha, registrar ledger, thika tenancy and ceiling checks'),
+S('Bihar','Patna','East',0,'Bihar Bhumi','Dakhil kharij mutation, jamabandi, registry verification'),
+S('Odisha','Bhubaneswar','East',0,'Bhulekh Odisha','Record of rights, registration search, development authority lease status'),
+S('Jharkhand','Ranchi','East',0,'Jharbhoomi','Register II, tenancy law limits (CNT and SPT Acts), deed inspection'),
+S('Assam','Dispur','East',0,'Dharitree','Myadi and eksona patta, tribal belt restrictions, mutation orders'),
+S('Meghalaya','Shillong','East',0,'Land revenue and district councils','Land transfer law, council NOC, leasehold checks'),
+S('Tripura','Agartala','East',0,'Jami Tripura','Khatian records, sub-registrar deed search'),
+S('Sikkim','Gangtok','East',0,'Land revenue department','Parchey ownership, revenue orders, urban planning checks'),
+S('Arunachal Pradesh','Itanagar','East',0,'Land management','Land possession certificate, allotment papers, customary law'),
+S('Manipur','Imphal','East',0,'Land revenue records','Dag and chitha, jamabandi, registrar search'),
+S('Mizoram','Aizawl','East',0,'Land revenue and settlement','Land settlement certificate, periodic patta, municipal boundaries'),
+S('Nagaland','Kohima','East',0,'Land revenue','Article 371A rules, clan consent, district office records'),
+S('Maharashtra','Mumbai','West',0,'IGR Maharashtra and Mahabhulekh','Index II search, 7/12 and property card, MahaRERA, society title'),
+S('Gujarat','Gandhinagar','West',0,'AnyRoR and registration','7/12 and 8A forms, disturbed areas rules, development plan'),
+S('Goa','Panaji','West',0,'Land survey Form I and XIV','Form I and XIV, communidade land, succession checks'),
+S('Karnataka','Bengaluru','South',0,'Kaveri and Bhoomi','Encumbrance certificate, RTC, A and B khata, land conversion'),
+S('Telangana','Hyderabad','South',0,'Dharani and registration','Agricultural mutation, encumbrance, layout and ceiling checks'),
+S('Tamil Nadu','Chennai','South',0,'Tnreginet and Patta Chitta','Encumbrance certificate, patta transfer, FMB sketch, layout approvals'),
+S('Kerala','Thiruvananthapuram','South',0,'PEARL and revenue records','Encumbrance, thandaper, paddy and wetland rules'),
+S('Andhra Pradesh','Amaravati','South',0,'Meebhoomi and IGRS','Adangal and 1-B, land pooling certificate, registry search'),
+S('Madhya Pradesh','Bhopal','Central',0,'MP Bhulekh and Sampada','Khasra and B-1, diversion orders, deed archives'),
+S('Chhattisgarh','Raipur','Central',0,'Bhuiyan and e-Panjiyan','B1 and P2 records, registry checks, authority clearances'),
+S('Delhi','New Delhi','North',1,'DORIS and land records','Sub-registrar searches, DDA and MCD conveyance, freehold conversion'),
+S('Chandigarh','Chandigarh','North',1,'Estate Office and Sub-Registrar','Allotment and transfer records, NOCs, registry search'),
+S('Jammu and Kashmir','Srinagar and Jammu','North',1,'Land records and registration','Jamabandi, girdawari, registry verification'),
+S('Ladakh','Leh','North',1,'Revenue department and hill council','Jamabandi, council land transfer rules'),
+S('Puducherry','Puducherry','South',1,'Land records and registration','Patta mutation, encumbrance search'),
+S('Andaman and Nicobar','Port Blair','East',1,'Land revenue directorate','Settlement records, lease scrutiny, coastal regulation approvals'),
+S('Dadra and Nagar Haveli and Daman and Diu','Daman','West',1,'Collectorate land records','Title chain, lease deeds, industrial plot assignments'),
+S('Lakshadweep','Kavaratti','South',1,'Revenue administration','Island tenure rules, occupancy rights')];
+const LIVE=n=>n==='Haryana';
+const ZL={North:'North India',East:'East and North-East',West:'West India',South:'South India',Central:'Central India'};
+const PT=['Plot / Land','Apartment / Flat','Commercial space','Agricultural land'];
+
+const PILLARS=[['pen','Deed Drafting','Sale deeds, gift deeds, wills, powers of attorney and affidavits drafted to protect the party who instructs us.'],['file','Property Documentation','Agreements to sell, undertakings, indemnities and the supporting papers a registration or loan file needs.'],['stamp','Registration Assistance','E-stamping and stamp duty guidance, appointment booking and execution at the Sub-Registrar.'],['shield','Legal Verification','A certified title search report and non-encumbrance opinion, signed by the advocate.']];
+const DOCS=['Sale Deeds','Agreements to Sell','Gift Deeds','Wills','Power of Attorney','Affidavits'];
+const STAGES=[
+['30-year Sub-Registrar search','We inspect the registers and indexes at the Sub-Registrar office for the last 30 years and trace every mother deed, sale deed, gift deed and partition in the chain.','Chain of title matrix',{h:'Sample index extract',cols:['Year','Deed','Book / Vol.','Remark'],rows:[['1994','Allotment letter','Authority record','Original allotment'],['2004','Sale deed','Book 1, Vol. 84','Stamp duty paid'],['2015','Gift deed','Book 1, Vol. 112','Within family'],['2026','Sale deed (proposed)','To be registered','Awaiting clearance']]}],
+['Revenue record and mutation audit','We check Jamabandi, khewat, khatoni and khasra at the Tehsil and confirm that intkal (mutation) was sanctioned and entered in the revenue record.','Revenue clearance note',{h:'Sample Jamabandi check',cols:['Item','Record shows','Status'],rows:[['Owner name','Matches registered deed','Clear'],['Khasra number','Matches site plan','Clear'],['Intkal','Entry sanctioned 2015','Clear'],['Charges','None entered','Clear']]}],
+['Litigation and attachment check','We search High Court, district court, DRT and RERA records for injunctions, stay orders, attachments and partition suits against the land.','Litigation clearance note',{h:'Sample court search log',cols:['Forum','Result'],rows:[['High Court','No matching case'],['District courts','No matching case'],['Debt Recovery Tribunal','No matching case'],['RERA','No complaint on record']]}],
+['Advocate-certified title opinion','You receive a signed Title Search Report and Non-Encumbrance Certificate in a format banks accept, ready for a loan or a purchase closing.','Bank-ready legal opinion',{h:'Sample opinion summary',cols:['Point','Finding'],rows:[['Chain of title','Unbroken for 30 years'],['Encumbrances','None found'],['Litigation','None found'],['Opinion','Title marketable']]}]];
+const SVC_HOME=[['30-year title search report','The full ownership chain from the Sub-Registrar registers: sale deeds, gift deeds, inheritance and encumbrance history.','Request report'],['Court and litigation check','A search across High Court, district courts, DRT and RERA for stay orders, civil disputes and mortgage attachments.','Check disputes'],['Jamabandi and mutation check','Direct verification of the revenue record: Jamabandi, khewat, khatoni, khasra and the status of intkal.','Verify records']];
+const SVC=[
+['30-year title search report','The full chain of ownership from the registers, with an advocate-certified opinion on whether the title is clear.',['30-year Sub-Registrar Book 1 and Index II search','Chain of earlier conveyance deeds','Advocate-certified title clearance opinion'],'Request title search'],
+['High Court and civil dispute check','A search of courts and tribunals for pending stay orders, partition suits, injunctions and recovery cases.',['High Court and civil case search','Stay order and attachment check','Bank mortgage and CERSAI verification'],'Check court cases'],
+['Jamabandi, mutation and revenue consultation','Direct verification of the revenue record for the land, and guidance on getting intkal sanctioned after a purchase or inheritance.',['Status of mutation in government record','Jamabandi, khewat and khatoni verification','Approved colony, licence and land-use check'],'Verify mutation'],
+['Agreement to sell and deed drafting','Custom drafting of agreements to sell, sale deeds, gift deeds and conveyance deeds with clauses that protect the party we act for.',['Buyer or seller protection clauses','Review of developer terms and conditions','Registration and stamp duty guidance'],'Draft agreement'],
+['Bank loan documentation','Certified title search reports, non-encumbrance certificates and legal scrutiny reports for home loans and loans against property.',['Bank-format title search report','Advocate-certified non-encumbrance docket','Prepared for nationalised and private lenders'],'Get loan documentation']];
+const DOCINFO=[['Sale deed','Transfers ownership against a price. Drafted with covenants on title, possession and dues, then registered.'],['Agreement to sell','Records the terms before the sale deed: price, advance, timeline and what happens on default. It does not transfer title.'],['Gift deed','Transfers property without payment, usually within a family, with the formalities needed for it to stand.'],['Will','Sets out who receives your property after you. Drafted clearly, witnessed properly and registered if you choose.'],['Power of attorney','Authorises someone to act for you, with defined limits. It is not a way to sell property.'],['Affidavit','A sworn statement for registration, mutation, loan or court use, drafted to the purpose it must serve.']];
+const BANK=[['Bank loan title search','Certified 30-year title search reports in the format retail home loan lenders ask for.'],['Sale deed and conveyance drafting','Sale deeds, gift deeds and lease deeds with protective clauses.'],['Registration desk','E-stamping, circle rate and stamp duty guidance, appointments and execution at the Sub-Registrar.'],['Mutation after purchase','Follow-through to get intkal sanctioned and the revenue record updated in your name.']];
+const COV=[['Panipat and Haryana','Sub-Registrar and Tehsil records, HSVP and DTCP checks, HRERA.','live'],['Delhi NCR','Sub-registrar searches and DDA and MCD records.','soon'],['Chandigarh Tricity','Estate Office, GMADA and HSVP records.','soon'],['Punjab','Jamabandi and registry searches.','soon']];
+const FAQ=[
+['What is a property title search report?','It is a written legal opinion prepared by an advocate after studying the registered deeds for 30 years. It shows whether ownership passed without a break, whether the seller can sell, and whether any mortgage, attachment or dispute affects the property.'],
+['Why do I need a title search before buying?','In India the buyer carries the risk of a defective title. If the seller has no right to sell, or the property is already mortgaged or in dispute, you can lose both the money and the property. A search tells you before you commit.'],
+['Which documents are reviewed?','The registered sale deeds and mother deeds, encumbrance records, Jamabandi and mutation entries, approved plans where relevant, and pending cases in the courts and tribunals that may cover the land.'],
+['How long does it take?','An express check for most files takes 24 to 48 hours. Physical inspection at the Sub-Registrar and Tehsil can take 2 to 4 working days, depending on how complex the chain is.'],
+['What if the search finds a defect?','You get a written note explaining the defect, how serious it is and what can be done, for example a rectification deed, a mutation application or a release from the lender. You then decide whether to proceed, renegotiate or walk away.'],
+['Can you draft and register the deed after the search?','Yes. Once the title is clear we draft the agreement or sale deed, guide you on stamp duty, book the Sub-Registrar appointment and attend the registration with you.']];
+const SCAN=[
+{t:'Buying on a power of attorney',lv:'bad',lt:'Critical risk',h:'A power of attorney sale does not pass ownership',b:'In Suraj Lamp and Industries v. State of Haryana (2012), the Supreme Court held that sale agreements, general powers of attorney and wills do not transfer title to immovable property. The authority can lapse if the owner dies or revokes it, and the owner or heirs can challenge your possession later.',p:['Check whether the owner is alive and whether the power of attorney is registered and unrevoked.','Arrange a registered sale deed signed by the owner, with legal heirs as confirming parties where needed.']},
+{t:'Inherited land, no mutation',lv:'warn',lt:'High litigation risk',h:'Heirs who are not on the record can stop the sale',b:'A seller may hold the parent’s papers, yet if there is no registered partition and the intkal was never sanctioned, other heirs such as sisters, brothers and co-owners may have a legal share and can file for partition.',p:['Review legal heir certificates and family records.','Check that Jamabandi and the intkal order show the seller’s exclusive share.','Obtain a registered family settlement or release deeds where shares are shared.']},
+{t:'Builder flat under construction',lv:'warn',lt:'Medium to high risk',h:'The builder’s lender may hold a charge over the land',b:'Developers often mortgage the project land to raise construction finance. Without a lender’s no-objection certificate and a title check, the bank’s charge can sit over your flat.',p:['Examine the development agreement, powers of attorney and any mortgage release.','Cross-check the HRERA registration, sanctioned plans and fire approvals.','Obtain the lender’s NOC before paying beyond the booking amount.']},
+{t:'Agricultural land and colonies',lv:'warn',lt:'Statutory approval risk',h:'Land use and licence approvals decide whether you can build',b:'Agricultural land needs permission for change of land use before it is used for housing or business, and plots in colonies without a licence can face action and cannot be financed. A deed signed without these approvals may not protect you.',p:['Verify the colony licence, layout plan and approvals from town planning.','Check the change of land use permission and the revenue category in Jamabandi.','Confirm any permission needed before registration.']}];
+const LAW=[
+['Core principle','Sale deed (registration) versus intkal (mutation)','Mutation is an entry in the revenue record that shows who pays the land revenue. It does not create or transfer ownership. Safe ownership needs a registered sale deed from the Sub-Registrar and an updated mutation in the revenue record. If either is missing, the title is incomplete.'],
+['Haryana land records','Jamabandi, khewat, khatoni and fard','The Jamabandi is the record of rights for a village. The khewat lists holdings, the khatoni records cultivation and possession, and each field has a khasra number. A fard is a certified copy of the entries. Always compare the owner’s name, share and any remarks on the fard with the registered deed.'],
+['Colonies and land use','Licences, approved layouts and change of land use','Plots in a colony without a licence, and agricultural land without permission for change of land use, are common sources of trouble. Ask for the licence, the approved layout plan and the permission, and have them checked before you pay.'],
+['Powers of attorney','GPA, agreement to sell and will sales','Following the Supreme Court’s ruling in Suraj Lamp and Industries v. State of Haryana (2012), a transaction made only by general power of attorney, agreement to sell and will does not transfer ownership. A registered conveyance deed is the safe route, and lenders ask for it.']];
+const FLAGS=['The seller cannot produce the original earlier deeds for the last 30 years.','The Jamabandi does not match the Sub-Registrar records.','There is an undischarged bank loan or a charge shown on CERSAI.','A stay order, injunction or partition suit is pending.'];
+const PRACTICE=[['Land title verification and due diligence','Thirty-year ownership chain analysis, encumbrance verification and legal scrutiny reports before you acquire.'],['Deed drafting and registration','Sale deeds, gift deeds, agreements to sell, wills, powers of attorney and affidavits, and execution at the Sub-Registrar.'],['Mutation and revenue record updates','Applications to update the revenue record after purchase, gift or inheritance.'],['Loan and banking documentation','Title reports, non-encumbrance certificates and legal clearance papers for banks and borrowers.'],['Registration assistance','Stamp duty guidance, e-stamping, appointments and attendance at registration.'],['Property documentation','Supporting papers such as undertakings, indemnities, possession letters and no-objection requests.']];
+const WHY=[['Property is our focus','We work on deeds, titles and land records every day, so we know where files go wrong.'],['Regional records','We handle Sub-Registrar and Tehsil records directly, not only online summaries.'],['Start to finish','Verification, drafting, registration and mutation under one roof.'],['Plain advice','Clear written findings you can act on, without legal jargon.']];
+const STEPS=[['Intake and document check','We review your deed copies and khasra or khewat details soon after you send them.','Target: within 30 minutes of working hours'],['Government record search','Physical scrutiny of the Sub-Registrar registers for 30 years, and the Jamabandi at the Tehsil.','Target: Day 1'],['Dispute and court scrutiny','Cross-checks across High Court, district courts, DRT and RERA for stay orders and cases.','Target: Day 1 to 2'],['Stamped and certified report','A signed non-encumbrance certificate and title clearance note sent on WhatsApp and email.','Target: 24 to 48 hours express']];
+const EST={types:[['Residential plot or land','plot','Site plan or khasra numbers'],['Apartment or flat','flat','Allotment letter, builder buyer agreement, society or builder NOC'],['Commercial asset','comm','Property tax receipts, approved building plan, land-use permission'],['Ancestral or patta land','anc','Family tree, legal heir papers, partition or will papers, latest Jamabandi']],
+scopes:[['30-year title search report','24 to 48 hours for an express digital check, 2 to 4 working days when the registers need physical inspection','30-year archival and encumbrance clearance',['Copy of the latest sale deed or conveyance','Earlier deeds in the chain, if available','Khewat, khatoni or khasra number']],['Revenue mutation (Jamabandi)','2 to 4 working days','Revenue record check and intkal status',['Registered deed or inheritance papers','Latest Jamabandi fard','Identity proof of the applicant']],['Bank loan docket','3 to 5 working days','Bank-format title search report and non-encumbrance certificate',['Sanction or application letter from the lender','Copy of title deeds','Latest Jamabandi fard']],['Deed drafting and registration','1 to 3 working days after the documents are final','Drafting, stamp duty guidance and Sub-Registrar execution',['Identity and address proof of all parties','Title deeds of the property','Agreed price and payment terms']]]};
+const BLOG0=[
+{id:'t30',cat:'Due diligence',tag:'Core guide',date:'November 2026',read:6,title:'The 30-year title search: what an advocate checks before you pay',lead:'Why banks and advocates look back three decades, and which registers settle the question.',by:'DeedSquare Legal Desk',body:'## Why 30 years\nThree decades is long enough to surface the mortgages, partitions, attachments and unregistered charges that can still bind a property today. It also matches the period within which the State can sue to recover land under the Limitation Act, 1963.\n## The registers at the Sub-Registrar\n- **Book 1** records registered deeds that deal with immovable property.\n- **Index II** lists transactions property by property, by khasra or plot number.\n!! Online summaries are not enough. Digital records often miss older deeds, and marginal notes on the physical register can change what an entry means.\n## The chain of title\nA clean title is an unbroken line from the original allotment or partition to the person selling today. One missing link, such as a succession deed or a probate, leaves the buyer’s title open to challenge.\n## Your checklist\n[] Collect the latest deed and every earlier deed you can\n[] Inspect Book 1 and Index II for 30 years\n[] Match the chain against Jamabandi and mutation entries\n[] Search courts, DRT and RERA for stay orders and suits\n[] Get a signed title report before paying any advance',checklist:['Collect the latest deed and every earlier deed you can','Inspect Book 1 and Index II for 30 years','Match the chain against Jamabandi and mutation entries','Search courts, DRT and RERA for stay orders and suits','Get a signed title report before paying any advance'],qna:[{q:'The seller has an allotment letter from HSVP. Do we still trace 30 years?',a:'If the plot was allotted directly by an authority, the chain starts with the allotment and the registered conveyance deed. You should still inspect Index II for any private mortgage, agreement to sell or attachment made after the allotment.'}]},
+{id:'rec',cat:'Haryana records',tag:'Land records',date:'October 2026',read:5,title:'Jamabandi, khatoni and intkal: reading Haryana land records',lead:'What each entry tells you, and what to do when the revenue record and the deed disagree.',by:'DeedSquare Legal Desk',body:'## Mutation is not title\nAn intkal entry records who is in the revenue books. It does not transfer ownership. The registered deed does that. You need both to line up.\n## What each record tells you\n- **Jamabandi:** the record of rights for the village.\n- **Khewat:** the list of ownership holdings.\n- **Khatoni:** who cultivates or holds possession.\n- **Khasra:** the number of each field.\n- **Fard:** a certified copy of the entries you can rely on.\n## When records disagree\nA mismatch between the deed and the Jamabandi is a signal. It can be a clerical delay, or it can point to an earlier break in the chain or a pending dispute.\n!! Do not pay the balance until the mismatch is explained in writing.\n## Quick checklist\n[] Get a fresh Jamabandi fard\n[] Compare owner name and share with the deed\n[] Check the intkal number and date\n[] Look for entries showing a mortgage or other charge',checklist:['Get a fresh Jamabandi fard','Compare owner name and share with the deed','Check the intkal number and date','Look for entries showing a mortgage or other charge'],qna:[{q:'The seller’s name is on the registered deed but not on the Jamabandi. Can I still buy?',a:'A registered deed is the title document, but a missing intkal means the revenue record has not caught up. Ask for the intkal order or application and an explanation before you pay.'}]},
+{id:'tsr',cat:'Bank loans & TSR',tag:'Bank standards',date:'September 2026',read:4,title:'What banks look for in a title search report',lead:'Why loan files get stuck after credit approval, and how to prepare yours.',by:'DeedSquare Legal Desk',body:'## Lenders rely on their own legal panel\nBefore a home loan is released against a property, lenders usually ask for a title search report and a legal opinion from an advocate on their panel or in an accepted format.\n## Common reasons for a flag\n- **Missing earlier deeds:** the registered mother deed from years ago cannot be produced.\n- **Unclear mutation:** the seller has a deed but the revenue record was never updated.\n- **A minor’s share:** ancestral property sold without the court permission needed for a minor’s interest.\n- **An existing charge:** a security interest already registered on CERSAI.\n## Preparing your file\n[] Keep the full chain of deeds together\n[] Get the latest Jamabandi fard\n[] Clear any old charge before applying\n[] Ask for the report in the lender’s format',checklist:['Keep the full chain of deeds together','Get the latest Jamabandi fard','Clear any old charge before applying','Ask for the report in the lender’s format'],qna:[{q:'The builder says the bank has approved the whole project. Do I still need a title report?',a:'Project approval covers the land the builder offered. Lenders still examine the title of your unit, so you should check for a double allotment, a pending dispute or an attachment against it.'}]},
+{id:'gpa',cat:'Fraud prevention',tag:'Supreme Court',date:'August 2026',read:4,title:'Why buying on a GPA is unsafe: the Suraj Lamp ruling',lead:'What the Supreme Court decided, and how to turn an old power of attorney purchase into proper title.',by:'DeedSquare Legal Desk',body:'## What the court held\nIn *Suraj Lamp and Industries Pvt Ltd v. State of Haryana* (2012), the Supreme Court held that sale agreements, general powers of attorney and wills do not convey title to immovable property under Section 54 of the Transfer of Property Act.\n>> A power of attorney is an agency document, not a transfer of ownership.\n## The risks\n- The authority lapses if the owner dies or revokes it.\n- Lenders refuse loans against such papers.\n- The owner’s heirs can challenge your possession.\n## The fix\nThe safe route is a registered conveyance deed signed by the owner or the legal heirs, followed by mutation in your name.',checklist:null,qna:[{q:'I bought a plot on a GPA years ago. What can I do now?',a:'Speak to an advocate about getting a registered deed executed by the owner or the legal heirs, and check what permissions apply. Do not rely on the old papers alone.'}]}];
+const CASES=[
+{id:'DS-2026-089',a:'Residential plot (sample), Model Town',loc:'Panipat Tehsil',sv:'30-year title search (NEC)',st:'Verified and clear',c:'ok',f:'Download TSR',cat:'v',tr:[['1994','Original authority allotment','Allotment record verified at the authority office.'],['2004','Registered sale deed','Sub-Registrar Book 1 inspected. Stamp duty confirmed paid.'],['2015','Inheritance intkal','Mutation entry confirmed in the revenue record. Legal heirs on record.'],['2026','Title clearance signed','Advocate signed the non-encumbrance certificate. Ready for loan or sale deed.']]},
+{id:'DS-2026-074',a:'Commercial plot (sample), GT Road',loc:'Samalkha',sv:'Mutation and Jamabandi check',st:'Mutation verified',c:'ok',f:'Mutation docket',cat:'v',tr:[['2019','Registered sale deed','Deed matches the khasra number in the revenue record.'],['2020','Intkal sanctioned','Order number and date confirmed.'],['2026','Revenue clearance issued','Jamabandi shows no charge.']]},
+{id:'DS-2026-062',a:'Apartment (sample), Sonipat bypass',loc:'Panipat Tehsil',sv:'Archival chain search, 1996 to 2026',st:'In scrutiny, day 2',c:'warn',f:'Track live status',cat:'p',tr:[['Day 1','Intake and document audit','Deed copies reviewed. Missing earlier deed requested.'],['Day 2','Register inspection','Book 1 and Index II inspection in progress.']]},
+{id:'DS-2026-041',a:'Agricultural land (sample), 6 killas',loc:'Israna',sv:'Land use and approval review',st:'Flagged, approval needed',c:'bad',f:'View legal alert',cat:'f',tr:[['Day 1','Record check','Land is recorded as agricultural.'],['Day 2','Alert raised','Permission for change of land use is not on file. Do not proceed until it is produced.']]},
+{id:'DS-2026-035',a:'Flat (sample), Sector 25',loc:'Panipat Tehsil',sv:'Bank loan documentation',st:'Bank-ready report',c:'ok',f:'Bank TSR docket',cat:'v',tr:[['Day 1','Chain verified','Thirty-year chain traced.'],['Day 3','Opinion signed','Report prepared in the lender’s format.']]}];
+/* ---- forms ---- */
+function stateOpts(){const z={};STATES.forEach(s=>(z[s.zone]??=[]).push(s));return '<option value="">Select state or UT</option><optgroup label="Live desk"><option>Panipat, Haryana</option></optgroup>'+Object.keys(z).map(k=>`<optgroup label="${ZL[k]}">${z[k].map(s=>`<option>${esc(s.n)}</option>`).join('')}</optgroup>`).join('')+'<option>Other</option>'}
+function F(p,n,l,o={}){const a=[`id="${p}-${n}"`,`name="${n}"`,`type="${o.t||'text'}"`];if(o.req)a.push('data-req="1"');if(o.ty)a.push(`data-type="${o.ty}"`);if(o.im)a.push(`inputmode="${o.im}"`);if(o.ml)a.push(`maxlength="${o.ml}"`);if(o.ph)a.push(`placeholder="${o.ph}"`);if(o.ac)a.push(`autocomplete="${o.ac}"`);return `<div class="field"><label for="${p}-${n}">${l}</label><input ${a.join(' ')}><small class="msg"></small></div>`}
+function fields(p,o={}){
+ const top=o.lite?'':`<div class="row2"><div class="field"><label for="${p}-ptype">Property type</label><select id="${p}-ptype" name="ptype" data-req="1"><option value="">Select type</option>${PT.map(x=>`<option>${x}</option>`).join('')}</select><small class="msg"></small></div><div class="field"><label for="${p}-state">State / jurisdiction</label><select id="${p}-state" name="state" data-req="1">${stateOpts()}</select><small class="msg"></small></div></div>`;
+ return top+`<div class="row2">${F(p,'name','Your name',{req:1,ac:'name'})}${F(p,'phone','WhatsApp number',{req:1,ty:'phone',im:'tel',ph:'10-digit mobile',ac:'tel'})}</div>
+ <div class="row2">${F(p,'village','Village / locality')}${F(p,'pin','PIN code',{ty:'pin',im:'numeric',ml:6,ph:'6 digits'})}</div>
+ <div class="row2">${F(p,'dag','Khasra / survey / plot no.')}${F(p,'patta','Khewat / khatoni / patta no.')}</div>`
+ +(o.note?`<div class="field"><label for="${p}-note">${o.note}</label><textarea id="${p}-note" name="note" rows="3"></textarea></div>`:'')
+ +(o.wa?`<label class="chk-line"><input type="checkbox" name="upd" checked> Send updates on WhatsApp</label>`:'')
+ +`<button class="btn btn-gold" type="submit">${o.btn||'Submit'}</button>`}
+function valid(f){let ok=true;$$('[data-req],[data-type]',f).forEach(i=>{const m=i.parentElement.querySelector('.msg');let e='';const v=i.value.trim();let d=v.replace(/\D/g,'');if(d.length>10)d=d.replace(/^(91|0)/,'');
+ if(i.dataset.req&&!v)e='Required';else if(v&&i.dataset.type==='phone'&&!/^[6-9]\d{9}$/.test(d))e='Enter a 10-digit mobile number';else if(v&&i.dataset.type==='pin'&&!/^\d{6}$/.test(v))e='PIN has 6 digits';
+ if(m)m.textContent=e;i.setAttribute('aria-invalid',e?'true':'false');if(e)ok=false});return ok}
+function handoff(title,rows,intro){rows=rows.filter(r=>r[1]);const msg=`Hello DeedSquare, ${intro}\n`+rows.map(r=>`${r[0]}: ${r[1]}`).join('\n');
+ $('#h-title').textContent=title;$('#h-rows').innerHTML=rows.map(r=>`<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join('');$('#h-wa').href=wa(msg);$('#h-copy').onclick=()=>copy(msg);
+ $$('.modal:not([hidden])').forEach(m=>{if(m.id!=='m-hand')closeM(m)});openM('m-hand')}
+const LBL={ptype:'Property type',state:'Jurisdiction',name:'Name',phone:'WhatsApp',village:'Village / locality',pin:'PIN',dag:'Khasra / survey no.',patta:'Khewat / khatoni no.',note:'Details'};
+const rowsOf=d=>Object.keys(LBL).map(k=>[LBL[k],d[k]]);
+let SESS=store.get('ds_sess',null);
+const K={
+ lead:d=>handoff('Send your property details',rowsOf(d),'I would like a free property check.'),
+ jam:d=>handoff('Send your Jamabandi request',rowsOf(d),'I would like a Jamabandi copy.'),
+ enq:d=>handoff('Send your enquiry',rowsOf(d),'I have an enquiry.'),
+ notify:d=>handoff('Send your request',[['Name',d.name],['WhatsApp',d.phone],['Region',d.region]],`please tell me when DeedSquare opens in ${d.region}.`),
+ sched:d=>{if(SC.slot==null){toast('Choose a time slot first');return}const dy=SC.days[SC.day];handoff('Send your appointment request',[['Mode',MODES[SC.mode]],['Day',dy[0]+', '+dy[1]],['Time slot',CFG.slots[SC.slot]],['Name',d.name],['WhatsApp',d.phone],['Village / locality',d.village],['PIN',d.pin],['Khasra / survey no.',d.dag],['Khewat / khatoni no.',d.patta],['Query',d.note]],'I would like to book a consultation.')},
+ signin:d=>{if(d.id.trim().toLowerCase()==='demo@deedsquare.in'&&d.pw==='123'){SESS={name:'Demo client',id:d.id.trim()};store.set('ds_sess',SESS);closeM($('#m-acct'));location.hash='#portal';renderPortal();toast('Signed in to the demo portal')}else{const m=$('#in-pw').parentElement.querySelector('.msg');m.textContent='Those details do not match the demo login.'}},
+ signup:d=>{if(!$('#up-terms').checked){$('#up-terr').textContent='Please accept the terms to continue';return}$('#up-terr').textContent='';SESS={name:d.name,id:d.phone};store.set('ds_sess',SESS);closeM($('#m-acct'));location.hash='#portal';renderPortal();toast('Demo account created in this browser')},
+ audit:d=>{CASES.unshift({id:'DS-2026-'+String(100+CASES.length).padStart(3,'0'),a:d.name,loc:d.place,sv:d.svc,st:'In scrutiny, day 1',c:'warn',f:'Track live status',cat:'p',tr:[['Day 1','Submitted','Your audit request was added to the demo portfolio.']]});PSEL=CASES[0].id;closeM($('#m-audit'));$('#f-audit').reset();renderPortal();toast('Added to your demo portfolio')},
+ stu:d=>studioLogin(d)};
+document.addEventListener('submit',e=>{const f=e.target;if(f.id==='st-form'){e.preventDefault();return}if(!f.matches('form[data-kind]'))return;e.preventDefault();if(!valid(f))return;K[f.dataset.kind](Object.fromEntries(new FormData(f)),f)});
+
+/* ---- home and static sections ---- */
+function renderHome(){
+ $('#f-hero').innerHTML=fields('hero',{btn:'Get my property report'});
+ $('#f-jam').innerHTML=fields('jam',{wa:1,btn:'Get my free Jamabandi copy'});
+ $('#f-lead').innerHTML=fields('enq',{note:'What do you need help with?',btn:'Send enquiry'});
+ $('#pillars').innerHTML=PILLARS.map(p=>`<div>${ic(p[0])}<h3>${p[1]}</h3><p>${p[2]}</p></div>`).join('');
+ $('#doc-chips').innerHTML=DOCS.map(d=>`<span class="chip">${d}</span>`).join('');
+ $('#adv-chips').innerHTML=DOCS.map(d=>`<span class="chip">${d}</span>`).join('');
+ $('#stages').innerHTML=STAGES.map((s,i)=>`<div class="stage"><span class="n">Stage ${i+1} of 4</span><h3>${s[0]}</h3><p>${s[1]}</p><p class="deliv">Deliverable: ${s[2]}</p><button class="link" data-sample="${i}">Inspect sample record ${ic('arrow')}</button></div>`).join('');
+ $('#svc-home').innerHTML=SVC_HOME.map(s=>`<div class="card"><h3>${s[0]}</h3><p>${s[1]}</p><button class="link" data-open="m-lead" data-note="Request: ${esc(s[0])}" data-title="${esc(s[0])}">${s[2]} ${ic('arrow')}</button></div>`).join('');
+ $('#bank-grid').innerHTML=BANK.map(b=>`<div class="card"><h3 style="font-size:1.1rem">${b[0]}</h3><p>${b[1]}</p></div>`).join('');
+ $('#cov-home').innerHTML=COV.map(c=>`<div class="card cov"><h3 style="font-size:1.1rem">${c[0]}<span class="pill ${c[2]==='live'?'ok':''}">${c[2]==='live'?'Live':'Coming soon'}</span></h3><p>${c[1]}</p>${c[2]==='live'?`<button class="link" data-open="m-lead" data-note="Check a property in ${esc(c[0])}" data-title="Check a property">Check a property ${ic('arrow')}</button>`:`<button class="link" data-notify="${esc(c[0])}">Notify me ${ic('arrow')}</button>`}</div>`).join('');
+ $('#faq').innerHTML=FAQ.map(q=>`<details class="q"><summary>${q[0]}${ic('chev')}</summary><p>${q[1]}</p></details>`).join('');
+ $('#svc-rows').innerHTML=SVC.map((s,i)=>`<article><div><h3>${i+1}. ${s[0]}</h3><p class="muted">${s[1]}</p></div><div><ul class="tick-list">${s[2].map(x=>`<li>${ic('check')}<span>${x}</span></li>`).join('')}</ul><button class="btn btn-ink btn-sm" data-open="m-lead" data-note="Request: ${esc(s[0])}" data-title="${esc(s[0])}">${s[3]}</button></div></article>`).join('');
+ $('#docs-grid').innerHTML=DOCINFO.map(d=>`<div class="card"><h3>${d[0]}</h3><p>${d[1]}</p><button class="link" data-open="m-lead" data-note="I need a ${esc(d[0].toLowerCase())} drafted." data-title="Draft: ${esc(d[0])}">Ask for a draft ${ic('arrow')}</button></div>`).join('');
+ const st=['Send the deed details','Share a copy of the latest deed and the khasra or khewat number. An old deed photo is enough to start.','We search and verify','We inspect the registers, the revenue record and the courts.','Receive the signed report','You get findings in writing, and the next step if a defect is found.'];
+ $('#svc-steps').innerHTML=[0,2,4].map((k,i)=>`<div><span class="n">${i+1}</span><h3 style="font-size:1.1rem">${st[k]}</h3><p class="muted">${st[k+1]}</p></div>`).join('');
+ $('#law').innerHTML=LAW.map((l,i)=>`<article><span class="tag">${l[0]}</span><div><h3>${i+1}. ${l[1]}</h3><p>${l[2]}</p></div></article>`).join('')+`<article><span class="tag">Fraud prevention</span><div><h3>Top red flags in a property title</h3><ul class="flags">${FLAGS.map((f,i)=>`<li><label><input type="checkbox" data-flag> <span>${f}</span></label></li>`).join('')}</ul><p id="flag-out" style="margin-top:1rem" aria-live="polite"></p></div></article>`;
+ $('#practice').innerHTML=PRACTICE.map(p=>`<div class="card"><h3 style="font-size:1.1rem">${p[0]}</h3><p>${p[1]}</p></div>`).join('');
+ $('#why').innerHTML=WHY.map(p=>`<div class="card flat"><h3 style="font-size:1.1rem">${p[0]}</h3><p>${p[1]}</p></div>`).join('');
+ $('#contact-steps').innerHTML=STEPS.map((s,i)=>`<div><span class="n">${i+1}</span><h3 style="font-size:1.1rem">${s[0]}</h3><p class="muted">${s[1]}</p><span class="pill">${s[2]}</span></div>`).join('');
+ $('#c-wa').href=wa('Hello DeedSquare, I would like to visit your office for property verification.');$('#fab-wa').href=wa();$('#dock-wa').href=wa();$('#c-dir').href=CFG.map;
+ $('#c-copy').onclick=()=>copy('DeedSquare, '+CFG.addr);$('#c-share').onclick=()=>copy(CFG.map);
+}
+/* scanner */
+let SCI=0;
+function renderScan(){$('#scan-tabs').innerHTML=SCAN.map((s,i)=>`<button class="chip ${i===SCI?'on':''}" role="tab" aria-selected="${i===SCI}" data-scan="${i}">${s.t}</button>`).join('');const s=SCAN[SCI];
+ $('#scan').innerHTML=`<div><span class="pill ${s.lv}">${s.lt}</span><h3>${s.h}</h3><p class="muted">${s.b}</p></div><div class="how"><h4 style="font-size:1.05rem">How DeedSquare protects you</h4><ul class="tick-list">${s.p.map(x=>`<li>${ic('check')}<span>${x}</span></li>`).join('')}</ul><button class="btn btn-gold" data-open="m-lead" data-note="Risk check: ${esc(s.t)}" data-title="Check this risk">Check my property</button></div>`}
+/* states */
+let DIRZ='All',DIRQ='';
+const HUBS=[['Haryana','Panipat desk','Tehsil and Sub-Registrar records, Jamabandi checks, HSVP and DTCP approvals, HRERA.','live'],['Delhi NCR','National Capital Region','DORIS records, DDA and MCD conveyance, freehold conversion.','soon'],['Chandigarh Tricity','Chandigarh, Mohali, Panchkula','Estate Office, GMADA and HSVP records.','soon'],['Punjab','Jamabandi and registry','Fard and intkal checks, PUDA and GMADA approvals.','soon'],['Uttar Pradesh','Lucknow and NCR districts','UP Bhulekh khasra and khatauni, IGRSUP registry.','soon'],['Rajasthan','Jaipur','Apna Khata, JDA patta and land conversion orders.','soon']];
+function renderStates(){
+ $('#hubs').innerHTML=HUBS.map(h=>`<div class="card cov"><h3>${h[0]}<span class="pill ${h[3]==='live'?'ok':''}">${h[3]==='live'?'Live now':'Coming soon'}</span></h3><p class="small muted">${h[1]}</p><p>${h[2]}</p>${h[3]==='live'?`<button class="link" data-open="m-lead" data-note="Verify a property in ${esc(h[0])}" data-title="Verify a property in Haryana" data-state="Panipat, Haryana">Verify Haryana property ${ic('arrow')}</button>`:`<button class="link" data-notify="${esc(h[0])}">Notify me ${ic('arrow')}</button>`}</div>`).join('');
+ const tabs=['All','North','East','West','South','Central','UT'];const cnt=z=>STATES.filter(s=>z==='All'||(z==='UT'?s.ut:s.zone===z)).length;
+ $('#dir-tabs').innerHTML=tabs.map(z=>`<button class="chip ${z===DIRZ?'on':''}" data-dz="${z}">${z==='All'?'All states and UTs':z==='UT'?'Union territories':ZL[z]} (${cnt(z)})</button>`).join('');
+ const q=DIRQ.toLowerCase();const list=STATES.filter(s=>(DIRZ==='All'||(DIRZ==='UT'?s.ut:s.zone===DIRZ))&&(!q||(s.n+s.c+s.r+s.k).toLowerCase().includes(q)));
+ $('#dir').innerHTML=list.map(s=>`<div class="card"><h3>${s.n}</h3><p class="small muted">${s.ut?'Union territory':'State'}, capital ${s.c}, ${ZL[s.zone]}</p><p><b>${s.r}</b></p><p>${s.k}.</p>${LIVE(s.n)?`<span class="pill ok" style="justify-self:start">Live in Panipat</span><button class="link" data-open="m-lead" data-note="Verify a property in ${esc(s.n)}" data-title="Verify a property in ${esc(s.n)}" data-state="Panipat, Haryana">Verify property ${ic('arrow')}</button>`:`<span class="pill" style="justify-self:start">Coming soon</span><button class="link" data-notify="${esc(s.n)}">Notify me ${ic('arrow')}</button>`}</div>`).join('')||'<p class="muted">No match. Try a different word.</p>'}
+/* estimator and scheduler */
+const MODES=['Visit the office','Phone call','WhatsApp video'];let ES={t:0,s:0};
+function renderEst(){const seg=(id,arr,k)=>{$(id).innerHTML=arr.map((a,i)=>`<button type="button" class="${ES[k]===i?'on':''}" data-est="${k}${i}">${a[0]}</button>`).join('')};seg('#est-t',EST.types,'t');seg('#est-s',EST.scopes,'s');
+ const t=EST.types[ES.t],s=EST.scopes[ES.s];$('#est-out').innerHTML=`<p><b>Estimated delivery:</b> ${s[1]}</p><p><b>Scope:</b> ${s[2]}</p><p><b>Bring:</b></p><ul class="tick-list">${s[3].concat([t[2]]).map(x=>`<li>${ic('check')}<span>${x}</span></li>`).join('')}</ul><p class="small muted">Timelines are estimates and depend on how complete the papers are.</p><button class="btn btn-gold" data-open="m-lead" data-note="${esc(s[0]+' for '+t[0].toLowerCase())}" data-title="Request this verification">Request verification for this property</button>`}
+let SC={mode:0,day:0,slot:null,days:[]};
+function mkDays(){const now=new Date(),fmt=d=>d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});const o=[];
+ const h=now.getHours()+now.getMinutes()/60;if(now.getDay()!==0&&CFG.slotStart.some(x=>x>h+.25))o.push(['Today',fmt(now),true]);
+ const n=new Date(now);do{n.setDate(n.getDate()+1)}while(n.getDay()===0);o.push(['Next working day',fmt(n),false]);
+ const s=new Date(now);do{s.setDate(s.getDate()+1)}while(s.getDay()!==6);if(s.toDateString()!==n.toDateString())o.push(['Next Saturday',fmt(s),false]);return o}
+function renderSched(){if(!SC.days.length){SC.days=mkDays();$('#sc-fields').innerHTML=fields('sc',{lite:1,note:'Legal query or service required'}).replace(/<button class="btn btn-gold" type="submit">Submit<\/button>/,'')}
+ $('#sc-mode').innerHTML=MODES.map((m,i)=>`<button type="button" class="${SC.mode===i?'on':''}" data-sc="m${i}">${m}</button>`).join('');
+ $('#sc-day').innerHTML=SC.days.map((d,i)=>`<button type="button" class="${SC.day===i?'on':''}" data-sc="d${i}">${d[0]}<br><small>${d[1]}</small></button>`).join('');
+ const now=new Date(),h=now.getHours()+now.getMinutes()/60,today=SC.days[SC.day][2];
+ $('#sc-slot').innerHTML=CFG.slots.map((s,i)=>{const off=today&&CFG.slotStart[i]<=h+.25;return `<button type="button" class="${SC.slot===i?'on':''}" ${off?'disabled':''} data-sc="s${i}">${s}</button>`}).join('')}
+/* quick check */
+let QC={};
+const QS=[['Are your property documents safe and up to date?',['Yes','No']],['Is the mutation (intkal) in the seller’s name in the revenue record?',['Yes','Not sure','No']],['Do you have the 30-year chain of earlier deeds?',['Yes','Not sure','No']]];
+function renderQuick(){const done=Object.keys(QC).length===QS.length;let h=QS.map((q,i)=>`<div class="field"><label>${q[0]}</label><div class="seg">${q[1].map(a=>`<button type="button" class="${QC[i]===a?'on':''}" data-qc="${i}|${a}">${a}</button>`).join('')}</div></div>`).join('');
+ if(done){const n=Object.values(QC).filter(v=>v!=='Yes').length;const r=n===0?['ok','Looks in order','Your answers show no obvious gap. A title report still confirms it before you pay.']:n===1?['warn','Worth verifying','One answer needs checking. A short verification will tell you whether it matters.']:['bad','High priority','More than one answer points to a gap. Get an advocate audit before you pay any advance.'];
+ h+=`<div class="est"><span class="pill ${r[0]}" style="justify-self:start">${r[1]}</span><p>${r[2]}</p><button class="btn btn-gold" data-open="m-lead" data-note="Quick check result: ${r[1]}. Answers: ${Object.values(QC).join(', ')}" data-title="Book an advocate audit call">Book a free advocate audit call</button></div>`}
+ $('#quick-body').innerHTML=h}
+/* portal */
+let PSEL=CASES[0].id,PF='all';
+function renderPortal(){const b=$('#portal-body');
+ if(!SESS){b.innerHTML=`<div class="card" style="max-width:560px;gap:.9rem"><h2 style="font-size:1.5rem">Sign in to see the demo dashboard</h2><p>The dashboard shows how a client tracks cases. It contains sample records only.</p><button class="btn btn-gold" data-open="m-acct">Sign in or create account</button><p class="small muted">Demo login: demo@deedsquare.in, password 123.</p></div>`;return}
+ const n=x=>CASES.filter(c=>c.cat===x).length;const list=CASES.filter(c=>PF==='all'||c.cat===PF);const sel=CASES.find(c=>c.id===PSEL)||CASES[0];
+ b.innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;margin-bottom:1.5rem"><p>Signed in as <b>${esc(SESS.name)}</b> (${esc(SESS.id)}), demo session with sample cases.</p><div class="cta-row"><button class="btn btn-gold btn-sm" data-open="m-audit">${ic('plus')} New property audit</button><button class="btn btn-line btn-sm" id="signout">Sign out</button></div></div>
+ <div class="grid g4" style="margin-bottom:2rem"><div class="stat"><b>${CASES.length}</b><span>Audited properties</span></div><div class="stat"><b>${n('v')}</b><span>Clear titles and verified records</span></div><div class="stat"><b>${n('p')}</b><span>Under active search</span></div><div class="stat"><b>${n('f')}</b><span>Flagged with restrictions</span></div></div>
+ <div class="sec-h" style="margin-bottom:1rem"><h2 style="font-size:1.6rem">Active title audit portfolio</h2></div>
+ <div class="tabs">${[['all','All ('+CASES.length+')'],['v','Verified ('+n('v')+')'],['p','In progress ('+n('p')+')'],['f','Flagged ('+n('f')+')']].map(t=>`<button class="chip ${PF===t[0]?'on':''}" data-pf="${t[0]}">${t[1]}</button>`).join('')}</div>
+ <div class="tw"><table><thead><tr><th>Case</th><th>Property</th><th>Service</th><th>Status</th><th>Action</th></tr></thead><tbody>${list.map(c=>`<tr class="${c.id===sel.id?'sel':''}"><td><b>#${c.id}</b></td><td><b>${esc(c.a)}</b><br><span class="small muted">${esc(c.loc)}</span></td><td>${esc(c.sv)}</td><td><span class="pill ${c.c}">${esc(c.st)}</span></td><td><button class="btn btn-line btn-sm" data-case="${c.id}">${c.f}</button></td></tr>`).join('')}</tbody></table></div>
+ <div class="split" style="margin-top:2rem"><div class="card" style="gap:1rem"><h3>Case trace: #${sel.id}</h3><ol class="tl">${sel.tr.map(t=>`<li><b>${esc(t[0])}: ${esc(t[1])}</b><span>${esc(t[2])}</span></li>`).join('')}</ol></div>
+ <div style="display:grid;gap:1.25rem"><div class="card"><h3>Helpdesk</h3><p>Direct advocate support for your active files at the Panipat office.</p><p class="small">Main Jattal Road, Panipat, near Pipal Wali Gali</p><div class="cta-row"><a class="btn btn-gold btn-sm" target="_blank" rel="noopener" href="${wa('Hello DeedSquare, I am logged in to the client portal and need help with my case.')}">${ic('wa')} WhatsApp desk</a><a class="btn btn-line btn-sm" href="tel:+919211111401">${ic('phone')} Call</a></div></div>
+ <div class="card"><h3>Upload deed copy</h3><p>Choose a sale deed, Jamabandi or khasra details for review.</p><div class="field"><label for="up-file">PDF or photo, up to 25 MB</label><input id="up-file" type="file" accept=".pdf,image/*"></div><p class="small muted" id="up-out" aria-live="polite">Demo only: the file stays in your browser and is not sent.</p></div></div></div>`}
+/* ---- gazette ---- */
+const CATS=['Due diligence','Haryana records','Bank loans & TSR','Fraud prevention','RERA & consumer law','Delhi NCR'];
+let BM=store.get('ds_bm',[]),HELP=store.get('ds_help',{}),ASKED=store.get('ds_asked',{}),UA=store.get('ds_ua',[]),LOG=store.get('ds_log',[]),BCAT='All';
+const allArts=()=>BLOG0.concat(UA);const pub=()=>BLOG0.concat(UA.filter(a=>a.status==='published'));
+function md(t){const inl=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');let out='',list=null;const tag={ul:['<ul>','</ul>'],ol:['<ol>','</ol>'],chk:['<ul class="chk">','</ul>']};
+ const end=()=>{if(list){out+=tag[list][1];list=null}};const li=(k,s)=>{if(list!==k){end();out+=tag[k][0];list=k}out+=`<li>${inl(s)}</li>`};
+ String(t).split('\n').forEach(l=>{let m;l=l.trimEnd();if(!l.trim()){end();return}
+ if(m=l.match(/^## (.+)/)){end();out+=`<h4>${inl(m[1])}</h4>`}else if(m=l.match(/^### (.+)/)){end();out+=`<h5>${inl(m[1])}</h5>`}else if(m=l.match(/^!! (.+)/)){end();out+=`<p class="warn">${inl(m[1])}</p>`}else if(m=l.match(/^>> (.+)/)){end();out+=`<blockquote>${inl(m[1])}</blockquote>`}
+ else if(m=l.match(/^\[\] (.+)/))li('chk',m[1]);else if(m=l.match(/^- (.+)/))li('ul',m[1]);else if(m=l.match(/^\d+\. (.+)/))li('ol',m[1]);else{end();out+=`<p>${inl(l)}</p>`}});end();return out}
+function artHTML(a,open){const bm=BM.includes(a.id),ask=ASKED[a.id]||[],ini=(a.by||'D').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+ return `<article class="art" id="art-${a.id}" data-id="${a.id}"><div class="meta"><span class="pill gold">${esc(a.tag||a.cat)}</span><span>${esc(a.cat)}</span><span>${esc(a.date)}, ${a.read} min read</span></div><h3 style="font-size:1.6rem">${esc(a.title)}</h3><p class="lead">${esc(a.lead)}</p>
+ <div class="tools"><button class="btn-t" data-a="toggle">${ic('chev')}<span>${open?'Collapse':'Read'}</span></button><button class="btn-t" data-a="share">${ic('share')}Share</button><button class="btn-t ${bm?'on':''}" data-a="bm">${ic('mark')}<span>${bm?'Bookmarked':'Bookmark'}</span></button>${a.checklist?`<button class="btn-t" data-a="cl">${ic('copy')}Copy checklist</button>`:''}</div>
+ <div class="art-body" ${open?'':'hidden'} style="display:grid;gap:1.25rem"><div class="prose">${md(a.body)}</div>
+ <div class="byline"><span class="avatar">${esc(ini)}</span><div><b>${esc(a.by||'DeedSquare Legal Desk')}</b><br><span class="small muted">Property documentation and verification</span></div><button class="btn btn-gold btn-sm" data-open="m-lead" data-note="Verification request after reading: ${esc(a.title)}" data-title="Request verification">Request verification</button></div>
+ <div><h4 style="margin-bottom:.8rem">Common questions</h4><div class="qa">${(a.qna||[]).map((x,i)=>{const k=a.id+'-'+i,n=HELP[k]||0;return `<div><b>${esc(x.q)}</b><span class="a">${esc(x.a)}</span><button class="btn-t ${n?'on':''}" style="justify-self:start" data-a="help" data-k="${k}">Helpful (${n})</button></div>`}).join('')||'<p class="muted small">No questions yet.</p>'}${ask.map(q=>`<div><b>Your question</b><span class="a">${esc(q)}</span><span class="pill warn" style="justify-self:start">Awaiting advocate reply</span></div>`).join('')}</div>
+ <div class="field" style="margin-top:1rem"><label for="ask-${a.id}">Ask an advocate</label><textarea id="ask-${a.id}" rows="3" placeholder="Describe your question without sharing sensitive personal details"></textarea><small class="muted">Questions are reviewed by an advocate before they appear publicly.</small></div><button class="btn btn-ink btn-sm" style="justify-self:start;margin-top:.5rem" data-a="ask">Post question</button></div></div></article>`}
+function renderBlog(){const list=pub();const cats=['All',...new Set(list.map(a=>a.cat))];if(!cats.includes(BCAT))BCAT='All';
+ $('#blog-tabs').innerHTML=cats.map(c=>`<button class="chip ${c===BCAT?'on':''}" data-bcat="${esc(c)}">${esc(c)} (${c==='All'?list.length:list.filter(a=>a.cat===c).length})</button>`).join('');
+ $('#blog-list').innerHTML=list.filter(a=>BCAT==='All'||a.cat===BCAT).map((a,i)=>artHTML(a,i===0)).join('');
+ $('#essential').innerHTML=list.map(a=>`<li><button class="link" style="text-align:left" data-jump="${a.id}">${esc(a.title)}</button><br><span class="small muted">${esc(a.date)}</span></li>`).join('')}
+$('#blog-list').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const art=b.closest('.art'),a=allArts().find(x=>x.id===art.dataset.id),k=b.dataset.a;
+ if(k==='toggle'){const body=$('.art-body',art);body.hidden=!body.hidden;$('span',b).textContent=body.hidden?'Read':'Collapse'}
+ else if(k==='share')copy(location.href);
+ else if(k==='bm'){BM=BM.includes(a.id)?BM.filter(x=>x!==a.id):BM.concat(a.id);store.set('ds_bm',BM);b.classList.toggle('on',BM.includes(a.id));$('span',b).textContent=BM.includes(a.id)?'Bookmarked':'Bookmark'}
+ else if(k==='cl')copy(a.title+'\n'+a.checklist.map((x,i)=>`${i+1}. ${x}`).join('\n'));
+ else if(k==='help'){const kk=b.dataset.k;HELP[kk]=HELP[kk]?0:1;store.set('ds_help',HELP);b.classList.toggle('on',!!HELP[kk]);b.textContent=`Helpful (${HELP[kk]})`}
+ else if(k==='ask'){const t=$('textarea',art),v=t.value.trim();if(!v){toast('Write your question first');return}(ASKED[a.id]=ASKED[a.id]||[]).push(v);store.set('ds_asked',ASKED);const n=document.createElement('div');n.innerHTML=artHTML(a,true);art.replaceWith(n.firstElementChild);toast('Submitted. It appears publicly after an advocate replies.')}});
+/* studio */
+const ST={user:null,tab:'write',edit:null,pv:'desk',html:false,d:{}};
+const hash7=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return (h>>>0).toString(16).padStart(8,'0').slice(0,7)};
+function logAdd(m){LOG.unshift({h:hash7(m+Date.now()),m,u:ST.user,t:new Date().toLocaleString('en-IN')});LOG=LOG.slice(0,60);store.set('ds_log',LOG)}
+function studioLogin(d){const ok=(d.u==='author'||d.u==='admin')&&d.p==='123';if(!ok){$('#st-p').parentElement.querySelector('.msg').textContent='Username or password is not recognised.';return}ST.user=d.u;ST.tab='write';ST.edit=null;ST.d={};renderStudio()}
+const DEF={title:'',cat:CATS[0],tag:'',by:'',lead:'',body:''};
+function grab(){const f=$('#st-form');if(!f)return;const E=f.elements;ST.d={title:E.title.value,cat:E.cat.value,tag:E.tag.value,by:E.by.value,lead:E.lead.value,body:E.body.value}}
+function renderStudio(){const b=$('#studio-body');
+ if(!ST.user){b.innerHTML=`<h3>Contributor sign-in</h3><p class="muted small">Write and manage Gazette articles here. This studio runs in your browser only. To publish for every visitor, the site needs a database behind it.</p><form id="f-stu" data-kind="stu" novalidate><div class="field"><label for="st-u">Username</label><input id="st-u" name="u" data-req="1" autocomplete="off"><small class="msg"></small></div><div class="field"><label for="st-p">Password</label><input id="st-p" name="p" type="password" data-req="1" autocomplete="off"><small class="msg"></small></div><button class="btn btn-gold" type="submit">Enter studio</button><p class="small muted">Demo access: author / 123 (contributor) or admin / 123 (chief editor).</p></form>`;return}
+ const adm=ST.user==='admin',pend=UA.filter(a=>a.status==='pending').length;
+ const tabs=[['write','Write'],['list','All articles'],['queue','Approvals ('+pend+')'],['log','Sync log']];
+ let h=`<div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:space-between;align-items:center;padding-right:2.5rem"><h3>Author studio</h3><span class="small muted">${adm?'Chief editor':'Contributor'}: ${ST.user} <button class="link" data-stu="out">Sign out</button></span></div><div class="tabs">${tabs.map(t=>`<button class="chip ${ST.tab===t[0]?'on':''}" data-stab="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+ if(ST.tab==='write'){const d=Object.assign({},DEF,ST.d);h+=`<div class="studio-g"><form id="st-form" novalidate style="display:grid;gap:.75rem;align-content:start"><div class="field"><label for="w-title">Article title</label><input id="w-title" name="title" value="${esc(d.title)}"></div>
+ <div class="row2"><div class="field"><label for="w-cat">Category</label><select id="w-cat" name="cat">${CATS.map(c=>`<option ${c===d.cat?'selected':''}>${c}</option>`).join('')}</select></div><div class="field"><label for="w-tag">Tag badge</label><input id="w-tag" name="tag" value="${esc(d.tag)}" placeholder="For example, Land records"></div></div>
+ <div class="field"><label for="w-by">Author name and designation</label><input id="w-by" name="by" value="${esc(d.by)}" placeholder="Name"></div>
+ <div class="field"><label for="w-lead">Summary shown on the card</label><textarea id="w-lead" name="lead" rows="2">${esc(d.lead)}</textarea></div>
+ <div class="field"><label for="w-body">Article content</label><div class="bar">${[['## ','Section'],['### ','Subheading'],['!! ','Warning'],['[] ','Checklist'],['>> ','Precedent'],['- ','Bullets'],['1. ','Steps'],['**bold**','Bold'],['*italic*','Italic']].map(x=>`<button type="button" class="btn-t" data-ins="${esc(x[0])}">${x[1]}</button>`).join('')}</div><textarea id="w-body" name="body" rows="12" placeholder="Write in plain words. Use the buttons for headings, lists and warning boxes.">${esc(d.body)}</textarea><small class="muted" id="w-wc"></small></div>
+ <div class="cta-row"><button type="button" class="btn btn-line btn-sm" data-save="draft">Save draft</button><button type="button" class="btn btn-gold btn-sm" data-save="submit">${adm?'Publish now':'Submit for approval'}</button><button type="button" class="btn btn-line btn-sm" data-stu="reset">Reset</button></div></form>
+ <div style="display:grid;gap:.6rem;align-content:start"><div style="display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap"><b>Live preview</b><div class="bar"><button class="btn-t ${ST.pv==='desk'?'on':''}" data-pv="desk">Desktop</button><button class="btn-t ${ST.pv==='mob'?'on':''}" data-pv="mob">Mobile</button><button class="btn-t ${ST.html?'on':''}" data-pv="html">Converted HTML</button></div></div><div class="pv ${ST.pv==='mob'?'mob':''}" id="w-pv"></div></div></div>`}
+ else if(ST.tab==='list'){const rows=BLOG0.map(a=>({a,own:0})).concat(UA.filter(a=>adm||a.owner===ST.user).map(a=>({a,own:1})));h+=`<div class="tw"><table><thead><tr><th>Article</th><th>Category</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows.map(({a,own})=>`<tr><td><b>${esc(a.title)}</b><br><span class="small muted">${esc(a.by||'')}</span></td><td>${esc(a.cat)}</td><td><span class="pill ${a.status==='published'||!own?'ok':a.status==='rejected'?'bad':'warn'}">${own?a.status:'built in'}</span></td><td>${esc(a.date)}</td><td>${own?`<button class="btn-t" data-edit="${a.id}">Edit</button> <button class="btn-t" data-del="${a.id}">Delete</button>`:'<span class="small muted">Read only</span>'}</td></tr>`).join('')}</tbody></table></div><button class="btn btn-gold btn-sm" style="justify-self:start" data-stab="write" data-new="1">${ic('plus')} Create new article</button>`}
+ else if(ST.tab==='queue'){const q=UA.filter(a=>a.status==='pending'&&(adm||a.owner===ST.user));h+=q.length?q.map(a=>`<div class="card"><h3 style="font-size:1.05rem">${esc(a.title)}</h3><p class="small muted">${esc(a.cat)}, submitted by ${esc(a.owner)}</p>${adm?`<div class="cta-row"><button class="btn btn-gold btn-sm" data-appr="${a.id}">Approve and publish</button><button class="btn btn-line btn-sm" data-rej="${a.id}">Reject</button></div>`:'<span class="pill warn" style="justify-self:start">Waiting for the chief editor</span>'}</div>`).join(''):'<p class="muted">Nothing is waiting for approval.</p>'}
+ else{h+=LOG.length?`<div class="tw"><table><thead><tr><th>Commit</th><th>Message</th><th>By</th><th>When</th></tr></thead><tbody>${LOG.map(l=>`<tr><td><code>${l.h}</code></td><td>${esc(l.m)}</td><td>${esc(l.u)}</td><td>${esc(l.t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">No activity yet. Saving, submitting and approving articles are recorded here as commits.</p>'}
+ b.innerHTML=h;if(ST.tab==='write')prev()}
+function prev(){const f=$('#st-form');if(!f)return;const E=f.elements;const d={title:E.title.value,cat:E.cat.value,tag:E.tag.value,by:E.by.value,lead:E.lead.value,body:E.body.value};const w=d.body.trim().split(/\s+/).filter(Boolean).length;$('#w-wc').textContent=`${w} words, about ${Math.max(1,Math.ceil(w/200))} min read`;const html=md(d.body);
+ $('#w-pv').innerHTML=ST.html?`<pre class="code">${esc(html)}</pre>`:`<div class="meta" style="display:flex;gap:.5rem;flex-wrap:wrap"><span class="pill gold">${esc(d.tag||d.cat)}</span></div><h3 style="margin:.6rem 0">${esc(d.title||'Untitled article')}</h3><p class="muted" style="margin-bottom:1rem">${esc(d.lead)}</p><div class="prose">${html}</div>`}
+function save(mode){grab();const d=ST.d,adm=ST.user==='admin';if(!d.title.trim()||!d.lead.trim()||!d.body.trim()){toast('Add a title, summary and content first');return}
+ const w=d.body.trim().split(/\s+/).length,now=new Date().toLocaleDateString('en-IN',{month:'long',year:'numeric'}),st=mode==='draft'?'draft':adm?'published':'pending';
+ const rec={id:ST.edit||'u'+Date.now().toString(36),cat:d.cat,tag:d.tag||d.cat,date:now,read:Math.max(1,Math.ceil(w/200)),title:d.title.trim(),lead:d.lead.trim(),by:d.by.trim()||'DeedSquare Legal Desk',body:d.body,checklist:null,qna:[],status:st,owner:ST.user};
+ const i=UA.findIndex(a=>a.id===rec.id);if(i>=0){rec.qna=UA[i].qna;rec.owner=UA[i].owner;UA[i]=rec}else UA.push(rec);store.set('ds_ua',UA);logAdd(`${i>=0?'update':'create'}(article): "${rec.title}" as ${st}`);ST.edit=null;ST.d={};ST.tab=st==='draft'?'list':st==='pending'?'queue':'list';renderStudio();renderBlog();toast(st==='published'?'Published to the Gazette':st==='pending'?'Submitted for approval':'Draft saved')}
+document.addEventListener('input',e=>{if(e.target.closest('#st-form'))prev()});
+document.addEventListener('click',e=>{const t=e.target;let b;
+ if(b=t.closest('[data-stab]')){grab();ST.tab=b.dataset.stab;if(b.dataset.new){ST.edit=null;ST.d={}}renderStudio()}
+ else if(b=t.closest('[data-pv]')){grab();const v=b.dataset.pv;if(v==='html')ST.html=!ST.html;else{ST.pv=v;ST.html=false}renderStudio()}
+ else if(b=t.closest('[data-ins]')){const ta=$('#w-body'),s=b.dataset.ins,a=ta.selectionStart,pre=(a>0&&ta.value[a-1]!=='\n'&&/^(##|!!|\[\]|>>|- |\d\.)/.test(s))?'\n':'';ta.setRangeText(pre+s,a,ta.selectionEnd,'end');ta.focus();prev()}
+ else if(b=t.closest('[data-save]'))save(b.dataset.save);
+ else if(b=t.closest('[data-stu]')){if(b.dataset.stu==='out'){ST.user=null;renderStudio()}else{ST.edit=null;ST.d={};renderStudio()}}
+ else if(b=t.closest('[data-edit]')){const a=UA.find(x=>x.id===b.dataset.edit);ST.edit=a.id;ST.d={title:a.title,cat:a.cat,tag:a.tag,by:a.by,lead:a.lead,body:a.body};ST.tab='write';renderStudio()}
+ else if(b=t.closest('[data-del]')){const a=UA.find(x=>x.id===b.dataset.del);if(b.dataset.sure){UA=UA.filter(x=>x.id!==a.id);store.set('ds_ua',UA);logAdd(`delete(article): "${a.title}"`);renderStudio();renderBlog()}else{b.dataset.sure='1';b.textContent='Confirm delete'}}
+ else if(b=t.closest('[data-appr]')){const a=UA.find(x=>x.id===b.dataset.appr);a.status='published';store.set('ds_ua',UA);logAdd(`publish(article): "${a.title}" approved`);renderStudio();renderBlog();toast('Approved and published')}
+ else if(b=t.closest('[data-rej]')){const a=UA.find(x=>x.id===b.dataset.rej);a.status='rejected';store.set('ds_ua',UA);logAdd(`reject(article): "${a.title}"`);renderStudio()}});
+/* ---- global events ---- */
+const PAGES=['home','services','know-the-law','blog','states','about','contact','portal'];
+function route(){let h=(location.hash||'#home').slice(1);if(!PAGES.includes(h))h='home';$$('[data-page]').forEach(s=>s.hidden=s.dataset.page!==h);$$('#menu a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));$('#menu').classList.remove('open');$('#burger').setAttribute('aria-expanded','false');if(h==='portal')renderPortal();window.scrollTo(0,0)}
+addEventListener('hashchange',route);
+$('#burger').onclick=()=>{const o=$('#menu').classList.toggle('open');$('#burger').setAttribute('aria-expanded',o)};
+$('#open-studio').onclick=()=>{renderStudio();openM('m-studio')};
+$('#dir-q').addEventListener('input',e=>{DIRQ=e.target.value;renderStates();});
+$('#autofill').onclick=()=>{$('#in-id').value='demo@deedsquare.in';$('#in-pw').value='123'};
+addEventListener('keydown',e=>{if(e.key==='Escape'){const m=$$('.modal:not([hidden])').pop();if(m)closeM(m)}});
+document.addEventListener('click',e=>{const t=e.target;let b;
+ if(t.classList&&t.classList.contains('modal')){closeM(t);return}
+ if(b=t.closest('[data-close]')){closeM(b.closest('.modal'));return}
+ if(b=t.closest('[data-open]')){e.preventDefault();const id=b.dataset.open;$$('.modal:not([hidden])').forEach(closeM);
+  if(id==='m-lead'){$('#lead-title').textContent=b.dataset.title||'Tell us about your property';$('#enq-note').value=b.dataset.note||'';if(b.dataset.state)$('#enq-state').value=b.dataset.state}
+  if(id==='m-quick'){QC={};renderQuick()}openM(id);return}
+ if(b=t.closest('[data-notify]')){$$('.modal:not([hidden])').forEach(closeM);$('#nf-region').value=b.dataset.notify;$('#nf-title').textContent='Tell me when '+b.dataset.notify+' opens';openM('m-notify');return}
+ if(b=t.closest('[data-scroll]')){const el=document.getElementById(b.dataset.scroll);el.scrollIntoView({behavior:'smooth',block:'center'});const i=$('input',el);setTimeout(()=>i&&i.focus({preventScroll:true}),400);return}
+ if(b=t.closest('[data-sample]')){const s=STAGES[+b.dataset.sample],x=s[3];$('#sample-body').innerHTML=`<h3>${x.h}</h3><p class="small muted">Illustration with fictional data. Real records are shown in your report.</p><div class="tw"><table style="min-width:0"><thead><tr>${x.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${x.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p><b>Deliverable:</b> ${s[2]}</p><button class="btn btn-gold" data-open="m-lead" data-note="Please run a search for my plot (stage: ${esc(s[0])})" data-title="Request an advocate search">Request an advocate search for your plot</button>`;openM('m-sample');return}
+ if(b=t.closest('[data-scan]')){SCI=+b.dataset.scan;renderScan();return}
+ if(b=t.closest('[data-bcat]')){BCAT=b.dataset.bcat;renderBlog();return}
+ if(b=t.closest('[data-jump]')){BCAT='All';renderBlog();const el=document.getElementById('art-'+b.dataset.jump);const body=$('.art-body',el);body.hidden=false;$('.btn-t span',el).textContent='Collapse';el.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(b=t.closest('[data-dz]')){DIRZ=b.dataset.dz;renderStates();return}
+ if(b=t.closest('[data-est]')){ES[b.dataset.est[0]]=+b.dataset.est.slice(1);renderEst();return}
+ if(b=t.closest('[data-sc]')){const k=b.dataset.sc[0],v=+b.dataset.sc.slice(1);if(k==='m')SC.mode=v;if(k==='d'){SC.day=v;SC.slot=null}if(k==='s')SC.slot=v;renderSched();return}
+ if(b=t.closest('[data-qc]')){const[i,a]=b.dataset.qc.split('|');QC[i]=a;renderQuick();return}
+ if(b=t.closest('[data-acct]')){const up=b.dataset.acct==='up';$$('[data-acct]').forEach(x=>x.classList.toggle('on',x===b));$('#f-in').hidden=up;$('#f-up').hidden=!up;$('#acct-title').textContent=up?'Create your account':'Sign in to your account';return}
+ if(b=t.closest('[data-pf]')){PF=b.dataset.pf;renderPortal();return}
+ if(b=t.closest('[data-case]')){PSEL=b.dataset.case;const c=CASES.find(x=>x.id===PSEL);renderPortal();toast(c.c==='bad'?'Legal alert shown in the case trace':'Demo: sample files are not attached. Case trace shown below.');return}
+ if(t.closest('#signout')){SESS=null;store.set('ds_sess',null);renderPortal();return}
+ if(b=t.closest('[data-flag]')){const n=$$('[data-flag]:checked').length;$('#flag-out').innerHTML=n?`<span class="pill ${n>1?'bad':'warn'}">${n} of ${FLAGS.length} red flags noted</span> <button class="link" data-open="m-lead" data-note="Red flags noted: ${n}" data-title="Get the property checked">Get it checked before you pay ${ic('arrow')}</button>`:'';return}
+});
+document.addEventListener('change',e=>{if(e.target.id==='up-file'){const f=e.target.files[0];$('#up-out').textContent=f?`Selected: ${f.name}. Demo only: the file stays in your browser and is not sent.`:''}if(e.target.matches('[data-flag]')){const n=$$('[data-flag]:checked').length;$('#flag-out').innerHTML=n?`<span class="pill ${n>1?'bad':'warn'}">${n} of ${FLAGS.length} red flags noted</span> <button class="link" data-open="m-lead" data-note="Red flags noted: ${n}" data-title="Get the property checked">Get it checked before you pay ${ic('arrow')}</button>`:''}});
+/* ---- init ---- */
+renderHome();renderScan();renderStates();renderEst();renderSched();renderBlog();renderPortal();route();
+})();
+
+</script>
