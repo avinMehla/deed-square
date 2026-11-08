@@ -4,19 +4,19 @@
 <style>
 /* Layout concept: navy brand bands carry the hero and footer; the lead form is a gold double-ruled "slip" echoing the printed card; content pages are plain, document-like sections. */
 :root{
- --bg:#F5F6FA;--surface:#FFFFFF;--surface-2:#ECEFF7;--ink:#0E1A3E;--ink-2:#46526F;--line:#D8DCE9;
- --band:#0E1A3E;--band-2:#18275C;--on-band:#F4F1E6;--on-band-2:#B7BFDA;
- --gold:#DDAB2F;--gold-text:#7F5C0B;--on-gold:#0E1A3E;--logo:#0E1A3E;
+ --bg:#FBF7EF;--surface:#FFFFFF;--surface-2:#F4ECDD;--ink:#2B1118;--ink-2:#64494E;--line:#E6DAC3;
+ --band:#4A1424;--band-2:#661D36;--on-band:#FBF3E4;--on-band-2:#E6CDD2;
+ --gold:#D2AC55;--gold-text:#7A5710;--on-gold:#2B1118;--logo:#4A1424;
  --ok:#1D7A4D;--ok-bg:#E2F2EA;--warn:#9A5B00;--warn-bg:#FBEBD0;--bad:#B3261E;--bad-bg:#F9E0DE;
  --serif:'Noto Serif Display','Noto Serif Devanagari',Georgia,'Times New Roman',serif;--sans:'Outfit','Noto Sans Devanagari',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --bg:#0A1130;--surface:#111B42;--surface-2:#16224F;--ink:#EEF1FA;--ink-2:#A8B2D2;--line:#27356A;
- --band:#070D26;--band-2:#101B47;--gold-text:#E5B63F;--gold:#E5B63F;--logo:#E5B63F;
+ --bg:#1B0B11;--surface:#291219;--surface-2:#351A23;--ink:#F8EEE6;--ink-2:#D3B9BB;--line:#4D2C37;
+ --band:#12060B;--band-2:#3B1322;--gold-text:#E2BC62;--gold:#E2BC62;--logo:#E2BC62;
  --ok:#5CD39A;--ok-bg:#12382B;--warn:#F0B35A;--warn-bg:#3A2B0E;--bad:#FF8F86;--bad-bg:#3E1A1A;color-scheme:dark}}
 :root[data-theme="dark"]{
- --bg:#0A1130;--surface:#111B42;--surface-2:#16224F;--ink:#EEF1FA;--ink-2:#A8B2D2;--line:#27356A;
- --band:#070D26;--band-2:#101B47;--gold-text:#E5B63F;--gold:#E5B63F;--logo:#E5B63F;
+ --bg:#1B0B11;--surface:#291219;--surface-2:#351A23;--ink:#F8EEE6;--ink-2:#D3B9BB;--line:#4D2C37;
+ --band:#12060B;--band-2:#3B1322;--gold-text:#E2BC62;--gold:#E2BC62;--logo:#E2BC62;
  --ok:#5CD39A;--ok-bg:#12382B;--warn:#F0B35A;--warn-bg:#3A2B0E;--bad:#FF8F86;--bad-bg:#3E1A1A;color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -179,7 +179,7 @@ details.q p{margin-top:.6rem;color:var(--ink-2);max-width:48rem}
  .dock a,.dock button{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-height:48px;justify-content:center;color:var(--on-band);font:500 .75rem var(--sans);text-decoration:none;background:none;border:0;cursor:pointer}
  .dock .i{width:1.3rem;height:1.3rem;color:var(--gold)}}
 /* modal */
-.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(4,9,28,.66);padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(24,5,12,.72);padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sheet{position:relative;background:var(--surface);color:var(--ink);width:100%;max-width:560px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:8px;padding:1.5rem;display:grid;gap:.9rem;align-content:start}
 .sheet.wide{max-width:1040px}
 .sheet .x{position:absolute;top:.6rem;right:.6rem;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);color:var(--ink);cursor:pointer;display:grid;place-items:center}
@@ -271,10 +271,109 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
 </style>
 <style>.seg button:disabled{opacity:.45;cursor:not-allowed}.seg button small{font-weight:400;opacity:.8}</style>
 
-<style>.lang-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 .7rem;margin-inline-start:auto;border:1.5px solid var(--gold);background:transparent;color:var(--ink);border-radius:5px;font:700 .95rem/1 var(--sans);cursor:pointer}.lang-btn:hover{background:var(--gold);color:#0E1A3E}.lang-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}:lang(hi) h1,:lang(hi) h2,:lang(hi) h3,:lang(hi) h4,:lang(hi) h5{line-height:1.3;letter-spacing:0}:lang(hi) p{line-height:1.75}:lang(hi) .brand b{font-family:'Outfit',sans-serif}</style>
+<style>.lang-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 .7rem;margin-inline-start:auto;border:1.5px solid var(--gold);background:transparent;color:var(--ink);border-radius:5px;font:700 .95rem/1 var(--sans);cursor:pointer}.lang-btn:hover{background:var(--gold);color:#2B1118}.lang-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}:lang(hi) h1,:lang(hi) h2,:lang(hi) h3,:lang(hi) h4,:lang(hi) h5{line-height:1.3;letter-spacing:0}:lang(hi) p{line-height:1.75}:lang(hi) .brand b{font-family:'Outfit',sans-serif}</style>
+
+<style>
+/* ===== v2: spacious, formal, ornamented ===== */
+html{font-size:106.25%}
+body{line-height:1.7}
+.wrap{max-width:1260px;padding-left:max(20px,env(safe-area-inset-left,0px),3vw);padding-right:max(20px,env(safe-area-inset-right,0px),3vw)}
+.sec{padding-block:clamp(4rem,9vw,7.5rem)}
+h1{font-size:clamp(2.4rem,5.6vw,4.1rem);letter-spacing:-.015em}
+h2{font-size:clamp(1.8rem,3.5vw,2.7rem)}
+.sec-h{max-width:50rem;margin:0 auto clamp(2.5rem,5vw,4rem);text-align:center;justify-items:center;gap:.9rem}
+.sec-h h2::after{content:"";display:block;width:92px;height:9px;margin:1.1rem auto 0;background:linear-gradient(var(--gold),var(--gold)) 0 0/100% 2px no-repeat,linear-gradient(var(--gold),var(--gold)) 50% 7px/54% 2px no-repeat}
+.sec-h p{font-size:1.08rem}
+.sec.alt{position:relative;background:var(--surface-2);border-block:1px solid var(--line)}
+.sec.alt::before{content:"";position:absolute;top:-8px;left:50%;width:14px;height:14px;transform:translateX(-50%) rotate(45deg);background:var(--bg);border:1.5px solid var(--gold);z-index:2}
+.card{border-radius:12px;padding:clamp(1.5rem,2.4vw,2.1rem);gap:.8rem;border-top:3px solid color-mix(in srgb,var(--gold) 55%,transparent);box-shadow:0 18px 36px -28px rgba(74,20,36,.45);transition:transform .2s,box-shadow .2s,border-color .2s}
+.card:hover{transform:translateY(-3px);border-top-color:var(--gold);box-shadow:0 26px 44px -26px rgba(74,20,36,.5)}
+.grid{gap:clamp(1.25rem,2.4vw,2rem)}
+.pillars{border-radius:14px;box-shadow:0 22px 44px -32px rgba(74,20,36,.5)}
+.pillars>div{padding:clamp(1.6rem,3vw,2.4rem)}
+.pillars .i{width:3rem;height:3rem;padding:.8rem;border:1.5px solid var(--gold);border-radius:50%;color:var(--gold-text);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.stage{border-top-width:4px;padding-top:1.4rem;gap:.8rem}
+.stage .n{letter-spacing:.14em;text-transform:uppercase;font-size:.75rem}
+.btn{border-radius:8px;min-height:48px;padding:.7rem 1.4rem}
+.btn-sm{min-height:40px}
+.btn-gold{background:linear-gradient(180deg,#E3BF6C,#C99F46);box-shadow:0 10px 22px -12px rgba(201,159,70,.9)}
+.chip{padding:.5rem 1rem}
+/* header */
+.topbar{border-bottom:1px solid rgba(210,172,85,.35)}
+.nav .wrap{min-height:80px}
+.nav{box-shadow:0 10px 30px -24px rgba(74,20,36,.6)}
+.menu a{padding:.6rem .8rem;font-size:1rem}
+.brand svg{width:46px;height:39px}
+.find-btn{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:0 .95rem;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:8px;font:600 .9rem var(--sans);cursor:pointer}
+.find-btn:hover{border-color:var(--gold)}
+.find-btn .i{color:var(--gold-text)}
+@media(max-width:1099px){.find-btn span{display:none}.find-btn{min-width:44px;justify-content:center;padding:0}}
+.lang-btn{margin-inline-start:0}
+/* hero */
+.hero{padding-block:clamp(3.5rem,8vw,6.5rem) clamp(7rem,12vw,10rem);background:radial-gradient(900px 480px at 85% 10%,rgba(210,172,85,.16),transparent 60%),radial-gradient(700px 500px at -5% 100%,rgba(0,0,0,.28),transparent 60%),linear-gradient(135deg,var(--band),var(--band-2) 120%)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(210,172,85,.05) 0 1px,transparent 1px 22px);pointer-events:none}
+.hero .wm{display:none}
+.scales-wm{position:absolute;right:2%;top:50%;transform:translateY(-52%);width:min(46vw,560px);height:auto;color:var(--gold);opacity:.09;pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:.55rem;font:600 .78rem var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.eyebrow::before,.eyebrow::after{content:"";width:34px;height:1px;background:var(--gold);opacity:.7}
+.eyebrow .i{width:1.3em;height:1.3em}
+.hero h1{max-width:13em}
+.hero .sub{font-size:1.15rem;line-height:1.75;max-width:36rem;margin-top:1.4rem}
+.ticks{margin:1.8rem 0 2rem;gap:.8rem}
+.hero-grid{gap:clamp(2rem,5vw,5rem);align-items:center}
+.slip{border-radius:14px;padding:clamp(1.8rem,3vw,2.5rem);box-shadow:0 40px 70px -34px rgba(0,0,0,.7)}
+.slip::after{inset:8px;border-radius:9px;border:1px solid color-mix(in srgb,var(--gold) 70%,transparent)}
+.slip form{gap:1rem}
+.facts{margin-top:clamp(2.5rem,6vw,4rem);border-top:1px solid rgba(210,172,85,.35)}
+.facts div{padding:1.4rem 1.2rem 0 0}
+.facts b{font-size:1.75rem}
+.colonnade{position:absolute;left:0;top:0;width:100%;height:64px;color:var(--gold);opacity:.1;pointer-events:none}.foot{padding-top:6.5rem}
+/* task strip */
+.tasks-sec{position:relative;z-index:5;margin-top:-5.5rem;padding-bottom:1rem}
+.tasks{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(1.4rem,3vw,2.4rem);box-shadow:0 40px 70px -40px rgba(74,20,36,.6);position:relative}
+.tasks::after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:11px;pointer-events:none}
+.tasks h2{font-size:clamp(1.4rem,2.4vw,1.9rem);text-align:center}
+.tasks>p{text-align:center;color:var(--ink-2);margin:.4rem 0 1.6rem}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1rem;position:relative;z-index:1}
+.tile{display:grid;gap:.35rem;text-align:left;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:1.2rem 1.2rem 1.3rem;cursor:pointer;font:inherit;align-content:start;transition:transform .18s,border-color .18s,box-shadow .18s}
+.tile:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 18px 30px -22px rgba(74,20,36,.6)}
+.tile .ti{width:2.7rem;height:2.7rem;border-radius:50%;display:grid;place-items:center;background:var(--band);color:var(--gold);margin-bottom:.4rem}
+.tile .ti .i{width:1.3rem;height:1.3rem}
+.tile b{font:600 1.05rem/1.3 var(--serif)}
+.tile span.d{font-size:.88rem;color:var(--ink-2);line-height:1.5}
+.tile .go{font-size:.85rem;font-weight:600;color:var(--gold-text);display:inline-flex;gap:.3rem;align-items:center;margin-top:.3rem}
+/* page heads */
+.phead{padding-block:clamp(3rem,7vw,5.5rem);background:radial-gradient(800px 400px at 90% 0,rgba(210,172,85,.15),transparent 60%),linear-gradient(135deg,var(--band),var(--band-2) 130%)}
+.phead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.phead h1{font-size:clamp(2rem,4.4vw,3.2rem)}
+.phead p{max-width:44rem;font-size:1.1rem;margin-top:.9rem}
+/* footer */
+.foot{position:relative;padding-block:6.5rem 6rem;background:linear-gradient(180deg,var(--band),#2A0B16)}
+.foot::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+/* finder modal */
+.finder{display:grid;gap:1rem}
+.finder .box{position:relative}
+.finder .box .i{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--gold-text)}
+.finder input{padding:.95rem 1rem .95rem 2.8rem;font-size:1.05rem;border-radius:10px;border:1.5px solid var(--gold)}
+.fres{display:grid;gap:.35rem;max-height:46vh;overflow:auto}
+.fres button{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 1rem var(--sans);cursor:pointer;text-align:left}
+.fres button:hover,.fres button:focus-visible{border-color:var(--gold);background:var(--surface-2)}
+.fres small{color:var(--ink-2);font-weight:400}
+.fres .pill{flex:none}
+.pop{display:flex;flex-wrap:wrap;gap:.5rem}
+.dir .card.hl{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 45%,transparent)}
+.dock{background:var(--band)}
+@media(max-width:700px){.dock{grid-template-columns:repeat(4,1fr)}.tasks-sec{margin-top:-4rem}}
+@media(prefers-reduced-motion:reduce){.card,.tile{transition:none}}
+</style>
+<style>@media(max-width:1420px){.nav-cta .btn-line{display:none}.menu a{padding:.6rem .6rem}}@media(max-width:1180px){.nav-cta .btn-gold{padding:.4rem .7rem}}</style>
+<style>.menu a,.nav-cta .btn,.find-btn{white-space:nowrap}@media(max-width:1420px){.find-btn span{display:none}.find-btn{min-width:44px;justify-content:center;padding:0}}</style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="logo" viewBox="0 0 100 84"><path d="M10.5 0H72L91 19.5V70H84V22.4L69.1 7H17.5V69H10.5Z"/><rect x="25" y="16" width="34" height="4.6"/><rect x="25" y="26" width="52" height="4.6"/><rect x="25" y="36" width="52" height="4.6"/><path d="M0 83 51 36 100 83H87.5L51 49.5 12.5 83Z"/><rect x="68" y="43" width="8.5" height="14"/><rect x="45" y="64" width="5" height="5"/><rect x="52" y="64" width="5" height="5"/><rect x="45" y="71" width="5" height="5"/><rect x="52" y="71" width="5" height="5"/></symbol>
+<symbol id="i-scales" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M12 3l-1 0"/><path d="M5 7 2 14a3.2 3.2 0 0 0 6 0zM19 7l-3 7a3.2 3.2 0 0 0 6 0z"/></symbol>
+<symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18M3 10h18"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></symbol>
 <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
 <symbol id="i-wa" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.2A8.5 8.5 0 1 1 21 11.5z"/><path d="M9 8.5c0 3 3 6 6 6l1.2-1.4-2-1-1 .6a4 4 0 0 1-1.8-1.8l.6-1-1-2z"/></symbol>
 <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
@@ -312,6 +411,7 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
   <a href="#home">Home</a><a href="#services">Services</a><a href="#know-the-law">Know the Law</a><a href="#blog">Gazette</a><a href="#states">States</a><a href="#about">About</a><a href="#contact">Contact</a>
  </nav>
  <div class="nav-cta"><button class="btn btn-line btn-sm" data-open="m-jam">Get Jamabandi</button><a class="btn btn-gold btn-sm" href="#portal"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg> Client portal</a></div>
+ <button class="find-btn" type="button" data-open="m-find" aria-label="Find your state"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><span>Find your state</span></button>
  <button class="lang-btn" id="lang" type="button" aria-label="भाषा / Language"><span>हिं</span></button>
  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
 </div></div>
@@ -321,10 +421,11 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
 <!-- HOME -->
 <section data-page="home">
  <div class="band hero">
-  <svg class="wm" viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg>
+  <svg class="scales-wm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-scales"/></svg>
   <div class="wrap">
    <div class="hero-grid">
     <div>
+     <span class="eyebrow"><svg class="i" aria-hidden="true"><use href="#i-scales"/></svg> Advocate, Panipat</span>
      <h1>Check the title before you sign the deed.</h1>
      <p class="sub">DeedSquare is the property practice of Advocate Sahil Khenchi in Panipat. We trace 30 years of ownership, check the revenue record and the courts, then draft and register the deed once the title is clear.</p>
      <ul class="ticks">
@@ -348,6 +449,17 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
    </div>
   </div>
  </div>
+
+ <div class="tasks-sec"><div class="wrap"><div class="tasks">
+  <h2>What do you need today?</h2><p>Choose one and we take you straight there.</p>
+  <div class="tgrid">
+   <button class="tile" data-open="m-lead" data-title="Get the property checked" data-note="Property verification request"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><b>Verify a property</b><span class="d">30-year title, court and revenue check before you pay.</span><span class="go">Start <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+   <button class="tile" data-open="m-jam"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg></span><b>Get a Jamabandi copy</b><span class="d">Certified revenue record, sent to your WhatsApp.</span><span class="go">Request <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+   <button class="tile" data-open="m-lead" data-title="Deed drafting and registration" data-note="Deed drafting and registration"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg></span><b>Draft or register a deed</b><span class="d">Sale deed, gift deed, will, power of attorney, affidavit.</span><span class="go">Ask for a draft <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+   <button class="tile" data-open="m-lead" data-title="Bank loan documentation" data-note="Bank loan documentation"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-bank"/></svg></span><b>Bank loan papers</b><span class="d">Title search report and non-encumbrance certificate.</span><span class="go">Get papers <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+   <a class="tile" href="#contact"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-cal"/></svg></span><b>Book a consultation</b><span class="d">Visit, call or video. First 15 minutes free.</span><span class="go">Pick a time <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+   <button class="tile" data-open="m-find"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg></span><b>Find your state</b><span class="d">All 28 states and 8 union territories, searchable.</span><span class="go">Search <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+  </div></div></div></div>
 
  <div class="sec"><div class="wrap">
   <div class="pillars" id="pillars"></div>
@@ -506,7 +618,7 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
 </section>
 </main>
 
-<footer class="foot"><div class="wrap">
+<footer class="foot"><svg class="colonnade" aria-hidden="true"><defs><pattern id="colp" width="64" height="64" patternUnits="userSpaceOnUse"><rect x="0" y="52" width="64" height="12" fill="currentColor"/><rect x="21" y="14" width="22" height="38" fill="currentColor"/><rect x="15" y="8" width="34" height="6" fill="currentColor"/></pattern></defs><rect width="100%" height="64" fill="url(#colp)"/></svg><div class="wrap">
  <div><a class="brand" href="#home"><svg viewBox="0 0 100 84" aria-hidden="true"><use href="#logo"/></svg><span><b>DeedSquare</b><small>Sahil Khenchi, Advocate</small></span></a>
   <p style="margin-top:1rem">Property title search, deed drafting, registration assistance and legal verification in Panipat.</p></div>
  <div><h4>Legal services</h4><ul><li><a href="#services">30-year title search report</a></li><li><a href="#services">Deed drafting and registration</a></li><li><a href="#services">Revenue mutation (Jamabandi)</a></li><li><a href="#services">Bank loan documentation</a></li><li><a href="#services">Court and litigation check</a></li></ul></div>
@@ -516,7 +628,7 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
 </div></footer>
 
 <div class="fab"><a class="wa" id="fab-wa" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg></a><a class="ph" href="tel:+919211111401" aria-label="Call"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg></a></div>
-<nav class="dock" aria-label="Quick actions"><a href="tel:+919211111401"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg> Call</a><a id="dock-wa" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg> WhatsApp</a><button data-open="m-quick"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg> Quick check</button></nav>
+<nav class="dock" aria-label="Quick actions"><a href="tel:+919211111401"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg> Call</a><a id="dock-wa" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg> WhatsApp</a><button data-open="m-find"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg> State</button><button data-open="m-quick"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg> Check</button></nav>
 <div class="toast" id="toast" hidden role="status"></div>
 
 <!-- MODALS -->
@@ -527,6 +639,11 @@ pre.code{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);
 <div class="modal" id="m-lead" hidden><div class="sheet" role="dialog" aria-label="Request"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
  <h3 id="lead-title">Tell us about your property</h3>
  <form id="f-lead" data-kind="enq" novalidate></form></div></div>
+
+<div class="modal" id="m-find" hidden><div class="sheet" role="dialog" aria-label="Find your state"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+ <h3>Find your state</h3><p class="muted small">Type a state, union territory or capital. Pick it to see the records we check there.</p>
+ <div class="finder"><div class="box"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="find-q" type="search" placeholder="For example, Haryana or Lucknow" autocomplete="off" aria-label="Find your state"></div>
+ <div class="fres" id="find-res"></div></div></div></div>
 
 <div class="modal" id="m-quick" hidden><div class="sheet" role="dialog" aria-label="Quick check"><button class="x" data-close aria-label="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
  <h3>Are your property papers safe?</h3><div id="quick-body" style="display:grid;gap:1rem"></div></div></div>
@@ -688,6 +805,8 @@ const CASES=[
 /* ---- Hindi / English ---- */
 let LANG=store.get('ds_lang',null)||((navigator.language||'').toLowerCase().startsWith('hi')?'hi':'en');
 const STR={
+'Find your state':'अपना राज्य खोजें','Type a state, union territory or capital. Pick it to see the records we check there.':'राज्य, केंद्र शासित प्रदेश या राजधानी लिखें। चुनने पर वहाँ जाँचे जाने वाले रिकॉर्ड दिखेंगे।','For example, Haryana or Lucknow':'उदाहरण: हरियाणा या लखनऊ','State':'राज्य','Check':'जाँच','Popular':'लोकप्रिय',
+'What do you need today?':'आज आपको क्या चाहिए?','Choose one and we take you straight there.':'एक चुनें, हम आपको सीधे वहाँ ले चलेंगे।','Verify a property':'संपत्ति सत्यापित करें','30-year title, court and revenue check before you pay.':'भुगतान से पहले 30 साल के टाइटल, कोर्ट और राजस्व की जाँच।','Get a Jamabandi copy':'जमाबंदी की प्रति पाएँ','Certified revenue record, sent to your WhatsApp.':'प्रमाणित राजस्व रिकॉर्ड, आपके व्हाट्सऐप पर।','Draft or register a deed':'डीड बनवाएँ या रजिस्ट्री कराएँ','Sale deed, gift deed, will, power of attorney, affidavit.':'सेल डीड, गिफ्ट डीड, वसीयत, पावर ऑफ अटॉर्नी, हलफनामा।','Bank loan papers':'बैंक लोन के कागज़ात','Title search report and non-encumbrance certificate.':'टाइटल सर्च रिपोर्ट और भार-मुक्ति प्रमाण पत्र।','Book a consultation':'परामर्श बुक करें','Visit, call or video. First 15 minutes free.':'कार्यालय, कॉल या वीडियो। पहले 15 मिनट मुफ़्त।','All 28 states and 8 union territories, searchable.':'सभी 28 राज्य और 8 केंद्र शासित प्रदेश, खोज के साथ।','Start':'शुरू करें','Request':'अनुरोध करें','Ask for a draft':'ड्राफ्ट माँगें','Get papers':'कागज़ात पाएँ','Pick a time':'समय चुनें','Search':'खोजें','Advocate, Panipat':'एडवोकेट, पानीपत',
 'Mon to Sat, 10:00 AM to 7:00 PM':'सोम से शनि, सुबह 10:00 से शाम 7:00 बजे तक','Main Jattal Road, Panipat':'मेन जट्टल रोड, पानीपत','Near Pipal Wali Gali, Panipat':'पीपल वाली गली के पास, पानीपत',
 'DeedSquare home':'DeedSquare होम','Sahil Khenchi, Advocate':'Sahil Khenchi, एडवोकेट','Advocate, Panipat':'एडवोकेट, पानीपत','Main':'मुख्य','Language':'भाषा',
 'Home':'होम','Services':'सेवाएँ','Know the Law':'कानून जानें','Gazette':'गैज़ेट','States':'राज्य','About':'हमारे बारे में','Contact':'संपर्क','Get Jamabandi':'जमाबंदी पाएँ','Client portal':'क्लाइंट पोर्टल','Menu':'मेनू',
@@ -1027,6 +1146,18 @@ document.addEventListener('click',e=>{const t=e.target;let b;
 document.addEventListener('change',e=>{if(e.target.id==='up-file'){const f=e.target.files[0];$('#up-out').textContent=f?`Selected: ${f.name}. Demo only: the file stays in your browser and is not sent.`:''}if(e.target.matches('[data-flag]')){const n=$$('[data-flag]:checked').length;$('#flag-out').innerHTML=n?`<span class="pill ${n>1?'bad':'warn'}">${n} of ${FLAGS.length} red flags noted</span> <button class="link" data-open="m-lead" data-note="Red flags noted: ${n}" data-title="Get the property checked">Get it checked before you pay ${ic('arrow')}</button>`:''}});
 /* ---- init ---- */
 renderHome();renderScan();renderStates();renderEst();renderSched();renderBlog();renderPortal();route();setLang(LANG,1);
+
+/* ---- state finder ---- */
+const POP=['Haryana','Delhi','Punjab','Uttar Pradesh','Rajasthan','Chandigarh','Maharashtra','Gujarat'];
+function renderFind(q){q=(q||'').trim().toLowerCase();const box=$('#find-res');if(!box)return;
+ let list=q?STATES.filter(s=>(s.n+' '+s.c+' '+tr(s.n)+' '+tr(s.c)).toLowerCase().includes(q)):POP.map(n=>STATES.find(s=>s.n===n)).filter(Boolean);
+ list=list.slice(0,14);
+ box.innerHTML=(q?'':`<p class="small muted">${T('Popular','लोकप्रिय')}</p>`)+(list.map(s=>`<button type="button" data-gostate="${esc(s.n)}"><span>${esc(tr(s.n))} <small>${esc(tr(s.c))}</small></span><span class="pill ${LIVE(s.n)?'ok':''}">${LIVE(s.n)?T('Live now','अभी चालू'):T('Coming soon','जल्द आ रहा है')}</span></button>`).join('')||`<p class="muted">${T('No match. Try a different word.','कोई परिणाम नहीं। दूसरा शब्द आज़माएँ।')}</p>`)}
+document.addEventListener('input',e=>{if(e.target.id==='find-q')renderFind(e.target.value)});
+document.addEventListener('keydown',e=>{if(e.target.id==='find-q'&&e.key==='Enter'){const b=$('#find-res [data-gostate]');if(b)b.click()}});
+document.addEventListener('click',e=>{const o=e.target.closest('[data-open="m-find"]');if(o)setTimeout(()=>{const i=$('#find-q');if(i){i.value='';renderFind('');i.focus()}},60);
+ const g=e.target.closest('[data-gostate]');if(g){const n=g.dataset.gostate;$$('.modal:not([hidden])').forEach(closeM);DIRQ=n;DIRZ='All';const dq=$('#dir-q');if(dq)dq.value=n;renderStates();if((location.hash||'#home')!=='#states')location.hash='#states';else route();
+  setTimeout(()=>{const c=$('#dir .card');if(c){c.classList.add('hl');c.scrollIntoView({behavior:'smooth',block:'center'})}},250)}});
 })();
 
 </script>
